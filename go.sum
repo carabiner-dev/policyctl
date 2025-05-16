@@ -11,12 +11,8 @@ github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5 h1:0CwZNZbxp69SHPd
 github.com/armon/go-socks5 v0.0.0-20160902184237-e75332964ef5/go.mod h1:wHh0iHkYZB8zMSxRWpUBQtwG5a7fFgvEO+odwuTv2gs=
 github.com/avast/retry-go/v4 v4.6.1 h1:VkOLRubHdisGrHnTu89g08aQEWEgRU7LVEop3GbIcMk=
 github.com/avast/retry-go/v4 v4.6.1/go.mod h1:V6oF8njAwxJ5gRo1Q7Cxab24xs5NCWZBeaHHBklR8mA=
-github.com/blang/semver/v4 v4.0.0 h1:1PFHFE6yCCTv8C1TeyNNarDzntLi7wMI5i/pzqYIsAM=
-github.com/blang/semver/v4 v4.0.0/go.mod h1:IbckMUScFkM3pff0VJDNKRiT6TG/YpiHIM2yvyW5YoQ=
-github.com/carabiner-dev/hasher v0.2.2 h1:wYzqB/BeiK7/D+Ho1VofcjrzvnlAalre0AeFOB3KmxM=
-github.com/carabiner-dev/hasher v0.2.2/go.mod h1:bM7reKZ5gGEY4Bbcd3Lr2KhrtqNkEhJOmQ4ptGasnFY=
-github.com/carabiner-dev/vcslocator v0.2.0 h1:oH86+Rn/TpIvsbP92/jhLOIdphtGvc8664gbv9ADNYM=
-github.com/carabiner-dev/vcslocator v0.2.0/go.mod h1:/67gubbzxtg25MIg/eRlmBkHExFDqyVZ2Dj0VJatHwE=
+github.com/carabiner-dev/vcslocator v0.2.2-0.20250511025212-70bcc04b9e68 h1:AqTOHHVn2SKq3KBF143BetrCtdxSJ6ctulp2BDXwYIM=
+github.com/carabiner-dev/vcslocator v0.2.2-0.20250511025212-70bcc04b9e68/go.mod h1:/67gubbzxtg25MIg/eRlmBkHExFDqyVZ2Dj0VJatHwE=
 github.com/cloudflare/circl v1.6.1 h1:zqIqSPIndyBh1bjLVVDHMPpVKqp8Su/V+6MeDzzQBQ0=
 github.com/cloudflare/circl v1.6.1/go.mod h1:uddAzsPgqdMAYatqJ0lsjX1oECcQLIlRpzZh3pJrofs=
 github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be h1:J5BL2kskAlV9ckgEsNQXscjIaLiOYiZ75d4e94E6dcQ=

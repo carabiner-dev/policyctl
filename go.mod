@@ -17,9 +17,7 @@ require (
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.1.6 // indirect
 	github.com/avast/retry-go/v4 v4.6.1 // indirect
-	github.com/blang/semver/v4 v4.0.0 // indirect
-	github.com/carabiner-dev/hasher v0.2.2 // indirect
-	github.com/carabiner-dev/vcslocator v0.2.0 // indirect
+	github.com/carabiner-dev/vcslocator v0.2.2-0.20250511025212-70bcc04b9e68 // indirect
 	github.com/cloudflare/circl v1.6.1 // indirect
 	github.com/common-nighthawk/go-figure v0.0.0-20210622060536-734e95fb86be // indirect
 	github.com/cyphar/filepath-securejoin v0.4.1 // indirect
