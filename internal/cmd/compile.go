@@ -62,19 +62,9 @@ func addCompile(parentCmd *cobra.Command) {
 			}
 			cmd.SilenceUsage = true
 
-			// Open the policy file
-			policyFile, err := os.Open(opts.policyFile)
+			set, _, err := policy.NewParser().Open(opts.policyFile)
 			if err != nil {
-				return fmt.Errorf("opening file: %w", err)
-			}
-
-			compiler, err := policy.NewCompiler()
-			if err != nil {
-				return fmt.Errorf("creating new policy compiler: %w", err)
-			}
-			set, err := compiler.CompileReader(policyFile)
-			if err != nil {
-				return fmt.Errorf("compiling policy: %w", err)
+				return err
 			}
 
 			data, err := protojson.MarshalOptions{
@@ -86,7 +76,7 @@ func addCompile(parentCmd *cobra.Command) {
 			}
 
 			var out io.Writer = os.Stdout
-			fmt.Fprintf(out, string(data))
+			fmt.Fprintln(out, string(data))
 
 			return nil
 		},

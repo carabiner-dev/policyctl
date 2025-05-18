@@ -36,6 +36,7 @@ func New() *cobra.Command {
 		fmt.Sprintf("the logging verbosity, either %s", log.LevelNames()),
 	)
 	addCompile(rootCmd)
+	addParse(rootCmd)
 	rootCmd.AddCommand(version.WithFont("doom"))
 	return rootCmd
 }
