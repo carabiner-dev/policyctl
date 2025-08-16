@@ -12,26 +12,28 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/carabiner-dev/ampel/pkg/policy"
+	"github.com/carabiner-dev/policy"
 )
 
 type compileOptions struct {
-	policyFile string
+	fileOptions
+	sign bool
 }
 
 // Validates the options in context with arguments
 func (co *compileOptions) Validate() error {
-	errs := []error{}
-	if co.policyFile == "" {
-		errs = append(errs, errors.New("no policy file specified"))
+	errs := []error{
+		co.fileOptions.Validate(),
 	}
+
 	return errors.Join(errs...)
 }
 
 // AddFlags adds the subcommands flags
 func (co *compileOptions) AddFlags(cmd *cobra.Command) {
-	cmd.PersistentFlags().StringVarP(
-		&co.policyFile, "policy", "p", "", "path to policy file",
+	co.fileOptions.AddFlags(cmd)
+	cmd.PersistentFlags().BoolVar(
+		&co.sign, "sign", false, "sign policy and output signed bundle",
 	)
 }
 
@@ -76,9 +78,14 @@ func addCompile(parentCmd *cobra.Command) {
 			}
 
 			var out io.Writer = os.Stdout
-			fmt.Fprintln(out, string(data))
 
-			return nil
+			if !opts.sign {
+				fmt.Fprintln(out, string(data))
+				return nil
+			}
+
+			// If signing was requested, replace the data with a signed bundle
+			return policy.NewSigner().SignPolicyData(data, out)
 		},
 	}
 	opts.AddFlags(compileCmd)
