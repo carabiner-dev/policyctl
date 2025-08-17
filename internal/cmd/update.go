@@ -12,7 +12,7 @@ import (
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 
-	"github.com/carabiner-dev/ampel/pkg/policy"
+	"github.com/carabiner-dev/policy"
 )
 
 type updateOptions struct {

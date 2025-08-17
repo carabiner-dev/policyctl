@@ -11,6 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 
 	"github.com/carabiner-dev/policy"
 )
@@ -40,7 +41,7 @@ func (co *compileOptions) AddFlags(cmd *cobra.Command) {
 func addCompile(parentCmd *cobra.Command) {
 	opts := &compileOptions{}
 	compileCmd := &cobra.Command{
-		Short:             "compiles a policyset to a standalone",
+		Short:             "compiles a policy or policySet to a standalone file",
 		Use:               "compile",
 		Example:           fmt.Sprintf(`%s compile policy.json`, appname),
 		SilenceUsage:      false,
@@ -64,15 +65,17 @@ func addCompile(parentCmd *cobra.Command) {
 			}
 			cmd.SilenceUsage = true
 
-			set, _, err := policy.NewParser().Open(opts.policyFile)
+			// Compile the file into a policy or set
+			set, pcy, err := policy.NewCompiler().CompileFile(opts.policyFile)
 			if err != nil {
 				return err
 			}
 
+			// Marshall the policy to json
 			data, err := protojson.MarshalOptions{
 				Multiline: true,
 				Indent:    "  ",
-			}.Marshal(set)
+			}.Marshal(policy.PolicyOrSet(set, pcy).(proto.Message))
 			if err != nil {
 				return fmt.Errorf("marshaling policy data: %w", err)
 			}

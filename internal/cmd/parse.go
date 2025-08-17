@@ -11,7 +11,7 @@ import (
 
 	"github.com/spf13/cobra"
 
-	"github.com/carabiner-dev/ampel/pkg/policy"
+	"github.com/carabiner-dev/policy"
 )
 
 type parseOptions struct {
