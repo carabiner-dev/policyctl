@@ -8,6 +8,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"strings"
 
 	"github.com/spf13/cobra"
 
@@ -16,6 +17,7 @@ import (
 
 type signOptions struct {
 	fileOptions
+	outputFile string
 }
 
 // Validates the options in context with arguments
@@ -30,14 +32,17 @@ func (so *signOptions) Validate() error {
 // AddFlags adds the subcommands flags
 func (so *signOptions) AddFlags(cmd *cobra.Command) {
 	so.fileOptions.AddFlags(cmd)
+	cmd.PersistentFlags().StringVarP(
+		&so.outputFile, "out", "o", "", "defaults to original policy filename + .ampel",
+	)
 }
 
 func addSign(parentCmd *cobra.Command) {
 	opts := &signOptions{}
 	parseCmd := &cobra.Command{
-		Short:             "parses a file",
-		Use:               "parse",
-		Example:           fmt.Sprintf(`%s parse policy.json`, appname),
+		Short:             "sign a policy or policy set",
+		Use:               "sign",
+		Example:           fmt.Sprintf(`%s sign policy.json`, appname),
 		SilenceUsage:      false,
 		SilenceErrors:     true,
 		PersistentPreRunE: initLogging,
@@ -71,12 +76,37 @@ func addSign(parentCmd *cobra.Command) {
 				return fmt.Errorf("readaing data: %w", err)
 			}
 
-			set, pcy, err := policy.NewParser().ParsePolicyOrSet(data)
-			if err != nil {
+			if _, _, err := policy.NewParser().ParsePolicyOrSet(data); err != nil {
 				return fmt.Errorf("parsing input: %w", err)
 			}
 
-			fmt.Printf("Set: %+v\nPolicy: %+v", set, pcy)
+			// The t parses OK. Let's sign it
+
+			// By default, we output to the same file with an .ampel ext
+			outName := opts.outputFile
+			if opts.outputFile == "" {
+				if !strings.HasSuffix(opts.policyFile, ".json") ||
+					strings.HasSuffix(opts.policyFile, ".hjson") {
+					return errors.New("unable to compute filename, policy is not a .json or .hjson file")
+				}
+
+				outName = strings.TrimSuffix(strings.TrimSuffix(opts.policyFile, ".json"), ".hjson") + ".ampel"
+			}
+
+			if _, err := os.Stat(outName); err == nil {
+				return errors.New("outpath already exists, not overwritting")
+			}
+
+			f, err := os.Create(outName)
+			if err != nil {
+				return fmt.Errorf("opening policy file: %w", err)
+			}
+
+			if err := policy.NewSigner().SignPolicyData(data, f); err != nil {
+				return fmt.Errorf("signing policy data: %w", err)
+			}
+
+			fmt.Fprintf(os.Stderr, "✅ signed policy written to %s", outName)
 
 			return nil
 		},
