@@ -40,9 +40,24 @@ func (so *signOptions) AddFlags(cmd *cobra.Command) {
 func addSign(parentCmd *cobra.Command) {
 	opts := &signOptions{}
 	parseCmd := &cobra.Command{
-		Short:             "sign a policy or policy set",
-		Use:               "sign",
-		Example:           fmt.Sprintf(`%s sign policy.json`, appname),
+		Short: "sign a policy or policy set",
+		Use:   "sign [flags] policy.json",
+		Long: `
+sign policies and policy sets
+
+The sign subcommand signs policies and policySets into sigstore bundles. By
+default, policies will be signed and to a file next to the original policy but
+replacing the .json or .hsjon extensions to .ampel (the reommended extension
+for signed ampel policies).
+
+When signing, policyctl uses sigstore to handle ephemeral keys. The signing
+operation will be reigsterd in the rekor transparency log. Unless specified,
+policyctl will try to read any ambient credentials to obtain an OIDC identity
+(eg on GitHub actions) and if it fails, it will launch the fill broser-based
+sigstore flow. 
+
+		`,
+		Example:           fmt.Sprintf(`%s sign -o policy.ampel policy.json`, appname),
 		SilenceUsage:      false,
 		SilenceErrors:     true,
 		PersistentPreRunE: initLogging,
