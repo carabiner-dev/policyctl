@@ -8,7 +8,7 @@ require (
 	github.com/carabiner-dev/policy v0.1.1-0.20250816041648-ae47ad101536
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.9.1
-	google.golang.org/protobuf v1.36.7
+	google.golang.org/protobuf v1.36.9
 	sigs.k8s.io/release-utils v0.12.1
 )
 
