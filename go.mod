@@ -1,12 +1,10 @@
 module github.com/carabiner-dev/policyctl
 
-go 1.24.6
-
-replace github.com/carabiner-dev/policy => ../policy
+go 1.25.1
 
 require (
 	github.com/carabiner-dev/command v0.1.1
-	github.com/carabiner-dev/policy v0.1.1-0.20250816041648-ae47ad101536
+	github.com/carabiner-dev/policy v0.1.1-0.20250915205746-b5f9ad03dc05
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.10.1
 	google.golang.org/protobuf v1.36.9
