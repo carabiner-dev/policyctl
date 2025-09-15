@@ -9,11 +9,10 @@ import (
 	"io"
 	"os"
 
+	"github.com/carabiner-dev/policy"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
-
-	"github.com/carabiner-dev/policy"
 )
 
 type compileOptions struct {
@@ -72,18 +71,20 @@ func addCompile(parentCmd *cobra.Command) {
 			}
 
 			// Marshall the policy to json
-			data, err := protojson.MarshalOptions{
+			marshaler := protojson.MarshalOptions{
 				Multiline: true,
 				Indent:    "  ",
-			}.Marshal(policy.PolicyOrSet(set, pcy).(proto.Message))
+			}
+			data, err := marshaler.Marshal(policy.PolicyOrSet(set, pcy).(proto.Message)) //nolint:errcheck,forcetypeassert
 			if err != nil {
 				return fmt.Errorf("marshaling policy data: %w", err)
 			}
 
 			var out io.Writer = os.Stdout
-
 			if !opts.sign {
-				fmt.Fprintln(out, string(data))
+				if _, err := fmt.Fprintln(out, string(data)); err != nil {
+					return err
+				}
 				return nil
 			}
 

@@ -9,10 +9,9 @@ import (
 	"io"
 	"os"
 
+	"github.com/carabiner-dev/policy"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
-
-	"github.com/carabiner-dev/policy"
 )
 
 type updateOptions struct {
@@ -36,8 +35,8 @@ func (co *updateOptions) AddFlags(cmd *cobra.Command) {
 }
 
 func addUpdate(parentCmd *cobra.Command) {
-	opts := &compileOptions{}
-	compileCmd := &cobra.Command{
+	opts := &updateOptions{}
+	updateCmd := &cobra.Command{
 		Short:             "updates a policy or policyset from sources",
 		Use:               "update",
 		Example:           fmt.Sprintf(`%s update policy.json`, appname),
@@ -76,11 +75,13 @@ func addUpdate(parentCmd *cobra.Command) {
 			}
 
 			var out io.Writer = os.Stdout
-			fmt.Fprintln(out, string(data))
+			if _, err := fmt.Fprintln(out, string(data)); err != nil {
+				return err
+			}
 
 			return nil
 		},
 	}
-	opts.AddFlags(compileCmd)
-	parentCmd.AddCommand(compileCmd)
+	opts.AddFlags(updateCmd)
+	parentCmd.AddCommand(updateCmd)
 }

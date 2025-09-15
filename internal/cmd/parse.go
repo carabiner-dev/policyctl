@@ -9,9 +9,8 @@ import (
 	"io"
 	"os"
 
-	"github.com/spf13/cobra"
-
 	"github.com/carabiner-dev/policy"
+	"github.com/spf13/cobra"
 )
 
 type parseOptions struct {

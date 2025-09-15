@@ -10,9 +10,8 @@ import (
 	"os"
 	"strings"
 
-	"github.com/spf13/cobra"
-
 	"github.com/carabiner-dev/policy"
+	"github.com/spf13/cobra"
 )
 
 type signOptions struct {

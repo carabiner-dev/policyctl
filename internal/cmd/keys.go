@@ -53,8 +53,7 @@ func addKeys(parentCmd *cobra.Command) {
 			if len(opts.PublicKeyPaths) > 0 {
 				return showKeyDetails(opts.KeyOptions)
 			}
-			cmd.Help()
-			return nil
+			return cmd.Help()
 		},
 	}
 	opts.AddFlags(keysCmd)
