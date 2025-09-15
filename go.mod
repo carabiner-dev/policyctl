@@ -7,7 +7,7 @@ replace github.com/carabiner-dev/policy => ../policy
 require (
 	github.com/carabiner-dev/policy v0.1.1-0.20250816041648-ae47ad101536
 	github.com/sirupsen/logrus v1.9.3
-	github.com/spf13/cobra v1.9.1
+	github.com/spf13/cobra v1.10.1
 	google.golang.org/protobuf v1.36.9
 	sigs.k8s.io/release-utils v0.12.1
 )
@@ -126,7 +126,7 @@ require (
 	github.com/spdx/tools-golang v0.5.5 // indirect
 	github.com/spf13/afero v1.12.0 // indirect
 	github.com/spf13/cast v1.7.1 // indirect
-	github.com/spf13/pflag v1.0.7 // indirect
+	github.com/spf13/pflag v1.0.9 // indirect
 	github.com/spf13/viper v1.20.1 // indirect
 	github.com/spiffe/go-spiffe/v2 v2.5.0 // indirect
 	github.com/subosito/gotenv v1.6.0 // indirect
