@@ -5,6 +5,7 @@ go 1.24.6
 replace github.com/carabiner-dev/policy => ../policy
 
 require (
+	github.com/carabiner-dev/command v0.1.1
 	github.com/carabiner-dev/policy v0.1.1-0.20250816041648-ae47ad101536
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.10.1
@@ -34,12 +35,12 @@ require (
 	github.com/asaskevich/govalidator v0.0.0-20230301143203-a9d515a09cc2 // indirect
 	github.com/avast/retry-go/v4 v4.6.1 // indirect
 	github.com/blang/semver v3.5.1+incompatible // indirect
-	github.com/carabiner-dev/attestation v0.1.1 // indirect
-	github.com/carabiner-dev/collector v0.1.2-0.20250816040159-9d460e4ef183 // indirect
+	github.com/carabiner-dev/attestation v0.1.2 // indirect
+	github.com/carabiner-dev/collector v0.1.2 // indirect
 	github.com/carabiner-dev/hasher v0.2.2 // indirect
 	github.com/carabiner-dev/openeox v0.0.0-20250606202227-fd40810cda47 // indirect
 	github.com/carabiner-dev/osv v0.0.0-20250124012120-b8ce4531cd92 // indirect
-	github.com/carabiner-dev/signer v0.1.2-0.20250815182539-bd60f13ef383 // indirect
+	github.com/carabiner-dev/signer v0.2.1 // indirect
 	github.com/carabiner-dev/vcslocator v0.3.2 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.2 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -157,8 +158,8 @@ require (
 	golang.org/x/net v0.42.0 // indirect
 	golang.org/x/oauth2 v0.30.0 // indirect
 	golang.org/x/sync v0.16.0 // indirect
-	golang.org/x/sys v0.35.0 // indirect
-	golang.org/x/term v0.34.0 // indirect
+	golang.org/x/sys v0.36.0 // indirect
+	golang.org/x/term v0.35.0 // indirect
 	golang.org/x/text v0.27.0 // indirect
 	golang.org/x/time v0.12.0 // indirect
 	google.golang.org/api v0.242.0 // indirect
