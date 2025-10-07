@@ -4,13 +4,17 @@
 package cmd
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
 	"os"
 
+	"github.com/TylerBrock/colorjson"
 	"github.com/carabiner-dev/policy"
 	"github.com/spf13/cobra"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/proto"
 )
 
 type parseOptions struct {
@@ -77,11 +81,35 @@ func addParse(parentCmd *cobra.Command) {
 				return fmt.Errorf("parsing input: %w", err)
 			}
 
-			fmt.Printf("Set: %+v\nPolicy: %+v", set, pcy)
-
+			//nolint:errcheck,forcetypeassert // We know the values, can't fail
+			if err := renderPolicyOrSet(policy.PolicyOrSet(set, pcy).(proto.Message)); err != nil {
+				return err
+			}
 			return nil
 		},
 	}
 	opts.AddFlags(parseCmd)
 	parentCmd.AddCommand(parseCmd)
+}
+
+func renderPolicyOrSet(p proto.Message) error {
+	data, err := protojson.Marshal(p)
+	if err != nil {
+		return fmt.Errorf("marshaling policy proto: %w", err)
+	}
+
+	// Unmarshal the data
+	var rawJson any
+	if err := json.Unmarshal(data, &rawJson); err != nil {
+		return fmt.Errorf("unmarshaling protojson: %w", err)
+	}
+	f := colorjson.NewFormatter()
+	f.Indent = 2
+
+	s, err := f.Marshal(rawJson)
+	if err != nil {
+		return fmt.Errorf("rendering policy output: %w", err)
+	}
+	fmt.Println(string(s))
+	return nil
 }
