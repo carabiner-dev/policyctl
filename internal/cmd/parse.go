@@ -12,6 +12,7 @@ import (
 
 	"github.com/TylerBrock/colorjson"
 	"github.com/carabiner-dev/policy"
+	"github.com/fatih/color"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -105,6 +106,9 @@ func renderPolicyOrSet(p proto.Message) error {
 	}
 	f := colorjson.NewFormatter()
 	f.Indent = 2
+	f.KeyColor = color.RGB(128, 128, 128)
+	f.StringColor = color.New(color.FgWhite)
+	f.BoolColor = color.New(color.FgRed)
 
 	s, err := f.Marshal(rawJson)
 	if err != nil {
