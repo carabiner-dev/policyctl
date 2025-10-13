@@ -5,7 +5,8 @@ go 1.25.1
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/carabiner-dev/command v0.1.1
-	github.com/carabiner-dev/policy v0.3.0
+	github.com/carabiner-dev/policy v0.3.1
+	github.com/fatih/color v1.18.0
 	github.com/sirupsen/logrus v1.9.3
 	github.com/spf13/cobra v1.10.1
 	google.golang.org/protobuf v1.36.10
@@ -56,7 +57,6 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/envoyproxy/go-control-plane/envoy v1.32.4 // indirect
 	github.com/envoyproxy/protoc-gen-validate v1.2.1 // indirect
-	github.com/fatih/color v1.18.0 // indirect
 	github.com/felixge/httpsnoop v1.0.4 // indirect
 	github.com/fsnotify/fsnotify v1.8.0 // indirect
 	github.com/go-chi/chi/v5 v5.2.3 // indirect
