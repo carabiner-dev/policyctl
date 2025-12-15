@@ -4,7 +4,7 @@ go 1.25.5
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/carabiner-dev/command v0.1.1
+	github.com/carabiner-dev/command v0.2.0
 	github.com/carabiner-dev/policy v0.4.1
 	github.com/fatih/color v1.18.0
 	github.com/sirupsen/logrus v1.9.3

@@ -90,8 +90,8 @@ github.com/carabiner-dev/attestation v0.2.0 h1:vEqAIapcHjIoEQad9GrKtEx2czeu7t4cu
 github.com/carabiner-dev/attestation v0.2.0/go.mod h1:dLPe3DPL/0YpKJpNDCQJZdtkZIuWTAH1G0N8V5LJ41c=
 github.com/carabiner-dev/collector v0.2.6 h1:GdhkZwMtN4WBvtVORjRim3M/yVf2tYyDsyjAWCf6KBc=
 github.com/carabiner-dev/collector v0.2.6/go.mod h1:OLed0W3zMK5o4CmZd6kkQyWSUy1TS40BPBaAL4JSu+Q=
-github.com/carabiner-dev/command v0.1.1 h1:Vl68ekV2YYtrLukVpTX20YC9aDS37k2EYKYUZbRsVP4=
-github.com/carabiner-dev/command v0.1.1/go.mod h1:svMEE2UmWE6ITNQ1HeFS/MFh/LfhFVDSWsRwRmQzWQ8=
+github.com/carabiner-dev/command v0.2.0 h1:PxYLg5Tf2tN7VBnFByq2L/HyJ6sgIqZhnNVnrXCFzc8=
+github.com/carabiner-dev/command v0.2.0/go.mod h1:svMEE2UmWE6ITNQ1HeFS/MFh/LfhFVDSWsRwRmQzWQ8=
 github.com/carabiner-dev/hasher v0.2.3 h1:678/FKyUJexzDznoIomnW/Z71hoL6Ehz99W2ZP2ACxE=
 github.com/carabiner-dev/hasher v0.2.3/go.mod h1:TRannDvJs5eL61xA/K/whtYbZLQPb/CGFXtDnx4h37M=
 github.com/carabiner-dev/jsonl v0.2.1 h1:2cBv4mGoqWfVkeQO1krIGds9WUm9Jet89QdqWLodlfo=
