@@ -40,6 +40,7 @@ func New() *cobra.Command {
 	addSign(rootCmd)
 	addKeys(rootCmd)
 	addUpdate(rootCmd)
+	addVerify(rootCmd)
 	rootCmd.AddCommand(version.WithFont("doom"))
 	return rootCmd
 }
