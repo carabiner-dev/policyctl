@@ -65,7 +65,7 @@ func addCompile(parentCmd *cobra.Command) {
 			cmd.SilenceUsage = true
 
 			// Compile the file into a policy or set
-			set, pcy, err := policy.NewCompiler().CompileFile(opts.policyFile)
+			set, pcy, grp, err := policy.NewCompiler().CompileFile(opts.policyFile)
 			if err != nil {
 				return err
 			}
@@ -75,21 +75,21 @@ func addCompile(parentCmd *cobra.Command) {
 				Multiline: true,
 				Indent:    "  ",
 			}
-			data, err := marshaler.Marshal(policy.PolicyOrSet(set, pcy).(proto.Message)) //nolint:errcheck,forcetypeassert
+			element, err := marshaler.Marshal(policy.PolicyOrSetOrGroup(set, pcy, grp).(proto.Message)) //nolint:errcheck,forcetypeassert
 			if err != nil {
 				return fmt.Errorf("marshaling policy data: %w", err)
 			}
 
 			var out io.Writer = os.Stdout
 			if !opts.sign {
-				if _, err := fmt.Fprintln(out, string(data)); err != nil {
+				if _, err := fmt.Fprintln(out, string(element)); err != nil {
 					return err
 				}
 				return nil
 			}
 
 			// If signing was requested, replace the data with a signed bundle
-			return policy.NewSigner().SignPolicyData(data, out)
+			return policy.NewSigner().SignPolicyData(element, out)
 		},
 	}
 	opts.AddFlags(compileCmd)
