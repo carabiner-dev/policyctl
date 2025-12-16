@@ -77,13 +77,13 @@ func addParse(parentCmd *cobra.Command) {
 				return fmt.Errorf("readaing data: %w", err)
 			}
 
-			set, pcy, err := policy.NewParser().ParsePolicyOrSet(data)
+			set, pcy, grp, _, err := policy.NewParser().ParseVerifyPolicyOrSetOrGroup(data)
 			if err != nil {
 				return fmt.Errorf("parsing input: %w", err)
 			}
 
 			//nolint:errcheck,forcetypeassert // We know the values, can't fail
-			if err := renderPolicyOrSet(policy.PolicyOrSet(set, pcy).(proto.Message)); err != nil {
+			if err := renderPolicyOrSetOrGroup(policy.PolicyOrSetOrGroup(set, pcy, grp).(proto.Message)); err != nil {
 				return err
 			}
 			return nil
@@ -93,7 +93,7 @@ func addParse(parentCmd *cobra.Command) {
 	parentCmd.AddCommand(parseCmd)
 }
 
-func renderPolicyOrSet(p proto.Message) error {
+func renderPolicyOrSetOrGroup(p proto.Message) error {
 	data, err := protojson.Marshal(p)
 	if err != nil {
 		return fmt.Errorf("marshaling policy proto: %w", err)
