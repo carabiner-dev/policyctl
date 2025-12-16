@@ -61,7 +61,7 @@ func addUpdate(parentCmd *cobra.Command) {
 			}
 			cmd.SilenceUsage = true
 
-			set, _, err := policy.NewParser().Open(opts.policyFile)
+			set, _, _, err := policy.NewParser().Open(opts.policyFile)
 			if err != nil {
 				return err
 			}
