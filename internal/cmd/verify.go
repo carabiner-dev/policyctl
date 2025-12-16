@@ -94,7 +94,7 @@ in a DSSE envelope.
 			}
 
 			if !opts.ExitCode {
-				return verifyAndPrintResult(data, *opts)
+				return verifyAndPrintResult(data, opts)
 			}
 
 			// Handle exit code
@@ -125,7 +125,7 @@ in a DSSE envelope.
 	parentCmd.AddCommand(verifyCmd)
 }
 
-func verifyAndPrintResult(data []byte, opts verifyOptions) error {
+func verifyAndPrintResult(data []byte, opts *verifyOptions) error {
 	keys, err := opts.ParseKeys()
 	if err != nil {
 		return fmt.Errorf("parsing keys: %w", err)
@@ -148,7 +148,7 @@ func verifyAndPrintResult(data []byte, opts verifyOptions) error {
 		return fmt.Errorf("unknown verification result %T", ver)
 	}
 
-	var validIds = []*sapi.Identity{}
+	validIds := []*sapi.Identity{}
 	for _, str := range opts.IdentityStrings {
 		nid, err := sapi.NewIdentityFromSlug(str)
 		if err != nil {
