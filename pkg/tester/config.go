@@ -65,7 +65,8 @@ func (s *TestSuite) Validate() error {
 	}
 
 	var errs []error
-	for i, tc := range s.Tests {
+	for i := range s.Tests {
+		tc := &s.Tests[i]
 		if tc.Name == "" {
 			errs = append(errs, fmt.Errorf("test %d: name is required", i))
 		}
@@ -77,8 +78,7 @@ func (s *TestSuite) Validate() error {
 		if expect != "PASS" && expect != "FAIL" {
 			errs = append(errs, fmt.Errorf("test %q: expect must be PASS or FAIL, got %q", tc.Name, tc.Expect))
 		}
-		// Normalize to uppercase
-		s.Tests[i].Expect = expect
+		tc.Expect = expect
 
 		if len(tc.Attestations) == 0 {
 			errs = append(errs, fmt.Errorf("test %q: at least one attestation is required", tc.Name))

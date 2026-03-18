@@ -70,27 +70,29 @@ func addTest(parentCmd *cobra.Command) {
 
 			// Print results
 			for _, tr := range result.Results {
-				fmt.Fprintf(os.Stdout, "=== RUN   %s\n", tr.Name)
-				if tr.Error != nil {
-					fmt.Fprintf(os.Stdout, "--- ERROR %s (%s)\n", tr.Name, tr.Duration.Round(10*time.Millisecond))
-					fmt.Fprintf(os.Stdout, "    %v\n", tr.Error)
-				} else if tr.Passed {
-					fmt.Fprintf(os.Stdout, "--- PASS  %s (%s)\n", tr.Name, tr.Duration.Round(10*time.Millisecond))
-				} else {
-					fmt.Fprintf(os.Stdout, "--- FAIL  %s (%s)\n", tr.Name, tr.Duration.Round(10*time.Millisecond))
-					fmt.Fprintf(os.Stdout, "    expected %s, got %s\n", tr.Expected, tr.Actual)
+				fmt.Printf("=== RUN   %s\n", tr.Name)
+				dur := tr.Duration.Round(10 * time.Millisecond)
+				switch {
+				case tr.Error != nil:
+					fmt.Printf("--- ERROR %s (%s)\n", tr.Name, dur)
+					fmt.Printf("    %v\n", tr.Error)
+				case tr.Passed:
+					fmt.Printf("--- PASS  %s (%s)\n", tr.Name, dur)
+				default:
+					fmt.Printf("--- FAIL  %s (%s)\n", tr.Name, dur)
+					fmt.Printf("    expected %s, got %s\n", tr.Expected, tr.Actual)
 				}
 			}
 
-			fmt.Fprintf(os.Stdout, "\nRESULTS: %d passed, %d failed, %d errors\n",
+			fmt.Printf("\nRESULTS: %d passed, %d failed, %d errors\n",
 				result.Passed, result.Failed, result.Errors)
 
 			if result.Failed > 0 || result.Errors > 0 {
-				fmt.Fprintln(os.Stdout, "FAIL")
+				fmt.Println("FAIL")
 				os.Exit(1)
 			}
 
-			fmt.Fprintln(os.Stdout, "ok")
+			fmt.Println("ok")
 			return nil
 		},
 	}

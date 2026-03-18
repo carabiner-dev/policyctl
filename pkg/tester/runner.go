@@ -35,11 +35,12 @@ func (r *Runner) RunSuite(ctx context.Context, suite *TestSuite) *SuiteResult {
 	for i := range suite.Tests {
 		result := r.RunTest(ctx, &suite.Tests[i])
 		sr.Results = append(sr.Results, *result)
-		if result.Error != nil {
+		switch {
+		case result.Error != nil:
 			sr.Errors++
-		} else if result.Passed {
+		case result.Passed:
 			sr.Passed++
-		} else {
+		default:
 			sr.Failed++
 		}
 	}
