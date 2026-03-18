@@ -9,7 +9,7 @@ import (
 	"io"
 	"os"
 
-	"github.com/carabiner-dev/command"
+	"github.com/carabiner-dev/command/keys"
 	"github.com/carabiner-dev/policy"
 	"github.com/carabiner-dev/policy/options"
 	sapi "github.com/carabiner-dev/signer/api/v1"
@@ -18,7 +18,7 @@ import (
 
 type verifyOptions struct {
 	fileOptions
-	command.KeyOptions
+	keys.Options
 	ExitCode        bool
 	IdentityStrings []string
 }
@@ -27,7 +27,7 @@ type verifyOptions struct {
 func (vo *verifyOptions) Validate() error {
 	errs := []error{
 		vo.fileOptions.Validate(),
-		vo.KeyOptions.Validate(),
+		vo.Options.Validate(),
 	}
 
 	return errors.Join(errs...)
@@ -36,7 +36,7 @@ func (vo *verifyOptions) Validate() error {
 // AddFlags adds the subcommands flags
 func (vo *verifyOptions) AddFlags(cmd *cobra.Command) {
 	vo.fileOptions.AddFlags(cmd)
-	vo.KeyOptions.AddFlags(cmd)
+	vo.Options.AddFlags(cmd)
 	cmd.PersistentFlags().StringSliceVar(
 		&vo.IdentityStrings, "signer", []string{}, "list of accepted signer identities",
 	)
@@ -98,13 +98,13 @@ in a DSSE envelope.
 			}
 
 			// Handle exit code
-			keys, err := opts.ParseKeys()
+			pubKeys, err := opts.ParseKeys()
 			if err != nil {
 				return fmt.Errorf("parsing keys: %w", err)
 			}
 
 			_, _, ver, err := policy.NewParser().ParseVerifyPolicyOrSet(
-				data, options.WithPublicKey(keys...),
+				data, options.WithPublicKey(pubKeys...),
 				options.WithIdentityString(opts.IdentityStrings...),
 			)
 			if err != nil {
@@ -126,13 +126,13 @@ in a DSSE envelope.
 }
 
 func verifyAndPrintResult(data []byte, opts *verifyOptions) error {
-	keys, err := opts.ParseKeys()
+	pubKeys, err := opts.ParseKeys()
 	if err != nil {
 		return fmt.Errorf("parsing keys: %w", err)
 	}
 
 	_, _, ver, err := policy.NewParser().ParseVerifyPolicyOrSet(
-		data, options.WithPublicKey(keys...),
+		data, options.WithPublicKey(pubKeys...),
 	)
 	if err != nil {
 		return fmt.Errorf("parsing input: %w", err)

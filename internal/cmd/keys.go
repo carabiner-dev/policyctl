@@ -9,17 +9,17 @@ import (
 	"slices"
 	"strings"
 
-	"github.com/carabiner-dev/command"
+	"github.com/carabiner-dev/command/keys"
 	"github.com/spf13/cobra"
 )
 
 type keyOptions struct {
-	command.KeyOptions
+	keys.Options
 }
 
 func (ko *keyOptions) Validate() error {
 	errs := []error{
-		ko.KeyOptions.Validate(),
+		ko.Options.Validate(),
 	}
 	return errors.Join(errs...)
 }
@@ -51,7 +51,7 @@ func addKeys(parentCmd *cobra.Command) {
 
 			cmd.SilenceUsage = true
 			if len(opts.PublicKeyPaths) > 0 {
-				return showKeyDetails(opts.KeyOptions)
+				return showKeyDetails(opts.Options)
 			}
 			return cmd.Help()
 		},
@@ -62,12 +62,12 @@ func addKeys(parentCmd *cobra.Command) {
 }
 
 type keyShowOptions struct {
-	command.KeyOptions
+	keys.Options
 }
 
 func (ko *keyShowOptions) Validate() error {
 	errs := []error{
-		ko.KeyOptions.Validate(),
+		ko.Options.Validate(),
 	}
 
 	if len(ko.PublicKeyPaths) == 0 {
@@ -78,7 +78,7 @@ func (ko *keyShowOptions) Validate() error {
 
 // AddFlags adds the subcommands flags
 func (ko *keyShowOptions) AddFlags(cmd *cobra.Command) {
-	ko.KeyOptions.AddFlags(cmd)
+	ko.Options.AddFlags(cmd)
 }
 
 func addKeysShow(parentCmd *cobra.Command) {
@@ -104,20 +104,20 @@ func addKeysShow(parentCmd *cobra.Command) {
 			}
 			cmd.SilenceUsage = true
 
-			return showKeyDetails(opts.KeyOptions)
+			return showKeyDetails(opts.Options)
 		},
 	}
 	opts.AddFlags(keysShowCmd)
 	parentCmd.AddCommand(keysShowCmd)
 }
 
-func showKeyDetails(opts command.KeyOptions) error {
-	keys, err := opts.ParseKeys()
+func showKeyDetails(opts keys.Options) error {
+	pubKeys, err := opts.ParseKeys()
 	if err != nil {
 		return fmt.Errorf("parsing keys: %w", err)
 	}
 
-	for _, k := range keys {
+	for _, k := range pubKeys {
 		pub, err := k.PublicKey()
 		fmt.Println()
 		fmt.Println("🔑 Key Details")
