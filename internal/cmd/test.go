@@ -31,7 +31,7 @@ func (to *testOptions) Validate() error {
 
 func (to *testOptions) AddFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVar(
-		&to.configFile, "config", ".ampel-tests.yaml", "test config file name",
+		&to.configFile, "config", ".ptests.yaml", "test config file name",
 	)
 	cmd.PersistentFlags().BoolVarP(
 		&to.verbose, "verbose", "v", false, "verbose output",
