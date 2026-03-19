@@ -10,6 +10,7 @@ import (
 	"strings"
 
 	"github.com/carabiner-dev/command/keys"
+	sapi "github.com/carabiner-dev/signer/api/v1"
 	"github.com/spf13/cobra"
 )
 
@@ -126,7 +127,14 @@ func showKeyDetails(opts keys.Options) error {
 			fmt.Printf("Error reading key: %s\n", err.Error())
 			continue
 		}
+		identity := &sapi.Identity{
+			Key: &sapi.IdentityKey{
+				Id:   pub.ID(),
+				Type: string(pub.Scheme),
+			},
+		}
 		fmt.Println("ID:         " + pub.ID())
+		fmt.Println("Slug:       " + identity.Slug())
 		fmt.Println("Scheme:     " + pub.Scheme)
 		fmt.Println("Type:       " + pub.Type)
 		fmt.Println("Key data:")

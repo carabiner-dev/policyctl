@@ -8,7 +8,7 @@ require (
 	github.com/carabiner-dev/collector v0.3.1
 	github.com/carabiner-dev/command v0.3.1-0.20260313054653-5c2e5699363e
 	github.com/carabiner-dev/policy v0.4.2
-	github.com/carabiner-dev/signer v0.4.1
+	github.com/carabiner-dev/signer v0.4.2-0.20260317092902-42e595fd41c1
 	github.com/fatih/color v1.18.0
 	github.com/in-toto/attestation v1.1.3-0.20260311170755-7bfb269c6eb5
 	github.com/sirupsen/logrus v1.9.4
