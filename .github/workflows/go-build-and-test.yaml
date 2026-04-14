@@ -9,30 +9,10 @@ on:
   workflow_dispatch: {}
 
 jobs:
-  resolve-versions:
-    runs-on: ubuntu-latest
-    outputs:
-      go-versions: ${{ steps.matrix.outputs.go-versions }}
-    steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      with:
-        persist-credentials: false
-
-    - name: Resolve Go versions
-      id: go-versions
-      uses: carabiner-dev/actions/go/versions@360ffa1eb909b0105d4eccb6d6ef337911c34952 # v1.1.6
-
-    - name: Build version matrix
-      id: matrix
-      run: |
-        echo "go-versions=[\"${{ steps.go-versions.outputs.GO_VERSION_STABLE }}\",\"${{ steps.go-versions.outputs.GO_VERSION_PREVIOUS }}\"]" >> "$GITHUB_OUTPUT"
-
   test:
-    needs: resolve-versions
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        go-version: ${{ fromJSON(needs.resolve-versions.outputs.go-versions) }}
         os: [ubuntu-latest, macos-latest, windows-latest]
       fail-fast: false
 
@@ -44,10 +24,14 @@ jobs:
       with:
         persist-credentials: false
 
-    - name: Set up Go ${{ matrix.go-version }}
+    - name: Resolve Go versions
+      id: go-versions
+      uses: carabiner-dev/actions/go/versions@360ffa1eb909b0105d4eccb6d6ef337911c34952 # v1.1.6
+
+    - name: Set up Go
       uses: actions/setup-go@4a3601121dd01d1626a1e23e37211e3254c1c06c # v6.4.0
       with:
-        go-version: ${{ matrix.go-version }}
+        go-version: ${{ steps.go-versions.outputs.GO_VERSION_STABLE }}
         cache: false
 
     - name: Test
