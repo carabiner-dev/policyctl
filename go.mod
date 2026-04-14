@@ -4,11 +4,11 @@ go 1.26.1
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/carabiner-dev/ampel v1.1.3
-	github.com/carabiner-dev/collector v0.3.3
+	github.com/carabiner-dev/ampel v1.1.4
+	github.com/carabiner-dev/collector v0.3.4-0.20260405002205-9441e61c839f
 	github.com/carabiner-dev/command v0.3.1-0.20260313054653-5c2e5699363e
-	github.com/carabiner-dev/policy v0.4.3
-	github.com/carabiner-dev/signer v0.4.2
+	github.com/carabiner-dev/policy v0.4.4
+	github.com/carabiner-dev/signer v0.4.3
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
 	github.com/sirupsen/logrus v1.9.4
@@ -28,7 +28,7 @@ require (
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/CycloneDX/cyclonedx-go v0.10.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
-	github.com/ProtonMail/go-crypto v1.4.0 // indirect
+	github.com/ProtonMail/go-crypto v1.4.1 // indirect
 	github.com/alecthomas/chroma/v2 v2.20.0 // indirect
 	github.com/anchore/go-struct-converter v0.1.0 // indirect
 	github.com/antlr4-go/antlr/v4 v4.13.1 // indirect
@@ -47,7 +47,7 @@ require (
 	github.com/carabiner-dev/osv v0.0.0-20250124012120-b8ce4531cd92 // indirect
 	github.com/carabiner-dev/predicates v0.1.0 // indirect
 	github.com/carabiner-dev/sbomfs v0.1.0 // indirect
-	github.com/carabiner-dev/vcslocator v0.4.0 // indirect
+	github.com/carabiner-dev/vcslocator v0.4.2 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc // indirect
@@ -74,7 +74,7 @@ require (
 	github.com/emirpasic/gods v1.18.1 // indirect
 	github.com/github/smimesign v0.2.0 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
-	github.com/go-git/go-billy/v5 v5.8.0 // indirect
+	github.com/go-git/go-billy/v5 v5.8.1-0.20260407233109-416e0a5b21a8 // indirect
 	github.com/go-git/go-git/v5 v5.17.2 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.3 // indirect
 	github.com/go-logr/logr v1.4.3 // indirect
@@ -152,10 +152,10 @@ require (
 	github.com/sergi/go-diff v1.4.0 // indirect
 	github.com/shibumi/go-pathspec v1.3.0 // indirect
 	github.com/sigstore/gitsign v0.14.0 // indirect
-	github.com/sigstore/protobuf-specs v0.5.0 // indirect
+	github.com/sigstore/protobuf-specs v0.5.1 // indirect
 	github.com/sigstore/rekor v1.5.1 // indirect
 	github.com/sigstore/rekor-tiles/v2 v2.2.1 // indirect
-	github.com/sigstore/sigstore v1.10.4 // indirect
+	github.com/sigstore/sigstore v1.10.5 // indirect
 	github.com/sigstore/sigstore-go v1.1.4 // indirect
 	github.com/sigstore/timestamp-authority/v2 v2.0.5 // indirect
 	github.com/skeema/knownhosts v1.3.2 // indirect
