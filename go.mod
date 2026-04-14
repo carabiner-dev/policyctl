@@ -19,7 +19,7 @@ require (
 
 require (
 	github.com/charmbracelet/glamour v1.0.0
-	github.com/yuin/goldmark v1.7.16
+	github.com/yuin/goldmark v1.8.2
 	gopkg.in/yaml.v3 v3.0.1
 )
 
