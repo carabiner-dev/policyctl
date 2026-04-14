@@ -7,7 +7,7 @@ require (
 	github.com/carabiner-dev/ampel v1.1.4
 	github.com/carabiner-dev/collector v0.3.4-0.20260405002205-9441e61c839f
 	github.com/carabiner-dev/command v0.3.1-0.20260313054653-5c2e5699363e
-	github.com/carabiner-dev/policy v0.4.6-0.20260414201106-ed3793f37c4e
+	github.com/carabiner-dev/policy v0.4.6-0.20260414211325-bc1592462719
 	github.com/carabiner-dev/signer v0.4.3
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
