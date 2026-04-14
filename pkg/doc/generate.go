@@ -82,6 +82,8 @@ func writePolicySet(b *strings.Builder, ps *papi.PolicySet) {
 	for _, g := range ps.GetGroups() {
 		writePolicyGroup(b, g, 2)
 	}
+
+	writeChangelog(b, ps.GetMeta().GetChangelog(), "## Changelog")
 }
 
 func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int) {
@@ -132,6 +134,8 @@ func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int
 		}
 		fmt.Fprintln(b)
 	}
+
+	writeChangelog(b, pg.GetMeta().GetChangelog(), h+"# Changelog")
 }
 
 func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
@@ -178,6 +182,27 @@ func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 			writeTenet(b, t, i, headingLevel+2)
 		}
 	}
+
+	writeChangelog(b, p.GetMeta().GetChangelog(), h+"# Changelog")
+}
+
+func writeChangelog(b *strings.Builder, entries []*papi.ChangeLog, heading string) {
+	if len(entries) == 0 {
+		return
+	}
+	section(b, heading)
+	fmt.Fprintln(b, "| Version | Date | Change |")
+	fmt.Fprintln(b, "|---------|------|--------|")
+	for _, e := range entries {
+		version := e.GetVersion()
+		date := ""
+		if d := e.GetDate(); d != nil {
+			date = d.AsTime().Format("2006-01-02")
+		}
+		msg := strings.ReplaceAll(e.GetMessage(), "\n", " ")
+		fmt.Fprintf(b, "| %s | %s | %s |\n", version, date, msg)
+	}
+	fmt.Fprintln(b)
 }
 
 func writeTenet(b *strings.Builder, t *papi.Tenet, index, headingLevel int) {
