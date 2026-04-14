@@ -7,7 +7,7 @@ require (
 	github.com/carabiner-dev/ampel v1.1.4
 	github.com/carabiner-dev/collector v0.3.4-0.20260405002205-9441e61c839f
 	github.com/carabiner-dev/command v0.3.1-0.20260313054653-5c2e5699363e
-	github.com/carabiner-dev/policy v0.4.5
+	github.com/carabiner-dev/policy v0.4.6-0.20260414201106-ed3793f37c4e
 	github.com/carabiner-dev/signer v0.4.3
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
@@ -20,6 +20,7 @@ require (
 require (
 	github.com/charmbracelet/glamour v1.0.0
 	github.com/yuin/goldmark v1.8.2
+	golang.org/x/term v0.41.0
 	gopkg.in/yaml.v3 v3.0.1
 )
 
@@ -182,7 +183,6 @@ require (
 	golang.org/x/oauth2 v0.36.0 // indirect
 	golang.org/x/sync v0.20.0 // indirect
 	golang.org/x/sys v0.42.0 // indirect
-	golang.org/x/term v0.41.0 // indirect
 	golang.org/x/text v0.35.0 // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260311181403-84a4fc48630c // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260311181403-84a4fc48630c // indirect
