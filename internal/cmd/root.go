@@ -40,6 +40,7 @@ func New() *cobra.Command {
 	addSign(rootCmd)
 	addKeys(rootCmd)
 	addUpdate(rootCmd)
+	addCheckUpdate(rootCmd)
 	addVerify(rootCmd)
 	addTest(rootCmd)
 	addDoc(rootCmd)
