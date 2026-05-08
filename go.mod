@@ -4,7 +4,7 @@ go 1.26.2
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/carabiner-dev/ampel v1.1.5
+	github.com/carabiner-dev/ampel v1.2.1
 	github.com/carabiner-dev/collector v0.3.5
 	github.com/carabiner-dev/command v0.3.1
 	github.com/carabiner-dev/policy v0.5.0
@@ -29,6 +29,7 @@ require (
 	cel.dev/expr v0.25.1 // indirect
 	dario.cat/mergo v1.0.2 // indirect
 	github.com/CycloneDX/cyclonedx-go v0.10.0 // indirect
+	github.com/Masterminds/semver/v3 v3.4.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.4.1 // indirect
 	github.com/alecthomas/chroma/v2 v2.20.0 // indirect
