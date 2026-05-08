@@ -5,9 +5,9 @@ go 1.26.2
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/carabiner-dev/ampel v1.1.5
-	github.com/carabiner-dev/collector v0.3.4
+	github.com/carabiner-dev/collector v0.3.5
 	github.com/carabiner-dev/command v0.3.1
-	github.com/carabiner-dev/policy v0.4.7
+	github.com/carabiner-dev/policy v0.5.0
 	github.com/carabiner-dev/signer v0.4.5
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
@@ -47,7 +47,7 @@ require (
 	github.com/carabiner-dev/jsonl v0.2.1 // indirect
 	github.com/carabiner-dev/openeox v1.0.0-pre.1 // indirect
 	github.com/carabiner-dev/osv v0.0.0-20250124012120-b8ce4531cd92 // indirect
-	github.com/carabiner-dev/predicates v0.1.0 // indirect
+	github.com/carabiner-dev/predicates v0.5.0 // indirect
 	github.com/carabiner-dev/sbomfs v0.1.0 // indirect
 	github.com/carabiner-dev/vcslocator v0.4.3 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
@@ -145,7 +145,7 @@ require (
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/protobom/cel v0.1.0 // indirect
-	github.com/protobom/protobom v0.5.4 // indirect
+	github.com/protobom/protobom v0.5.5 // indirect
 	github.com/regclient/regclient v0.11.3 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sassoftware/relic v7.2.1+incompatible // indirect
