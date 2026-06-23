@@ -134,7 +134,7 @@ func showKeyDetails(opts keys.Options) error {
 			},
 		}
 		fmt.Println("ID:         " + pub.ID())
-		fmt.Println("Slug:       " + identity.Slug())
+		fmt.Println("Slug:       " + identity.Spec())
 		fmt.Println("Scheme:     " + pub.Scheme)
 		fmt.Println("Type:       " + pub.Type)
 		fmt.Println("Key data:")
