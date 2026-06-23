@@ -150,7 +150,7 @@ func verifyAndPrintResult(data []byte, opts *verifyOptions) error {
 
 	validIds := []*sapi.Identity{}
 	for _, str := range opts.IdentityStrings {
-		nid, err := sapi.NewIdentityFromSlug(str)
+		nid, err := sapi.NewIdentityFromSpec(str)
 		if err != nil {
 			return err
 		}
@@ -163,7 +163,7 @@ func verifyAndPrintResult(data []byte, opts *verifyOptions) error {
 
 		fmt.Println("Verified signer identities:")
 		for _, id := range policyVer.GetSignature().GetIdentities() {
-			fmt.Print(" " + id.Slug())
+			fmt.Print(" " + id.Spec())
 			accepted := false
 			for _, aid := range validIds {
 				if policyVer.MatchesIdentity(aid) {
