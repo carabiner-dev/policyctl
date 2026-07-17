@@ -12,6 +12,7 @@ import (
 
 	ampelctx "github.com/carabiner-dev/ampel/pkg/context"
 	"github.com/carabiner-dev/ampel/pkg/verifier"
+	"github.com/carabiner-dev/collector"
 	"github.com/carabiner-dev/collector/envelope"
 	"github.com/carabiner-dev/policy"
 	gointoto "github.com/in-toto/attestation/go/v1"
@@ -122,9 +123,24 @@ func (r *Runner) executeTest(ctx context.Context, tc *TestCase) (string, error) 
 	opts := verifier.NewVerificationOptions()
 	opts.AttestationFiles = attPaths
 	opts.ContextProviders = ctxProviders
+	opts.IdentityStrings = tc.Signers
+
+	// Resolve any filesystem-backed collector paths against the test directory.
+	collectors := make([]string, len(tc.Collectors))
+	for i, c := range tc.Collectors {
+		collectors[i] = r.resolveCollector(c)
+	}
+
+	// Register the built-in collector types (fs, release, oci, ...) so the
+	// collector init strings can be resolved into fetchers.
+	if len(collectors) > 0 {
+		if err := collector.LoadDefaultRepositoryTypes(); err != nil {
+			return "", fmt.Errorf("loading collector types: %w", err)
+		}
+	}
 
 	// Create verifier and run
-	amp, err := verifier.New()
+	amp, err := verifier.New(verifier.WithCollectorInits(collectors))
 	if err != nil {
 		return "", fmt.Errorf("creating verifier: %w", err)
 	}
@@ -142,6 +158,21 @@ func (r *Runner) resolve(path string) string {
 		return path
 	}
 	return filepath.Join(r.baseDir, path)
+}
+
+// resolveCollector resolves the path portion of a filesystem-backed collector
+// init string (e.g. "fs:testdata/bundle") against baseDir. Collector types that
+// take a URL or other non-path spec (release:, oci:, git:, ...) are returned
+// unchanged.
+func (r *Runner) resolveCollector(spec string) string {
+	moniker, rest, ok := strings.Cut(spec, ":")
+	if !ok || rest == "" || filepath.IsAbs(rest) {
+		return spec
+	}
+	if moniker == "fs" {
+		return moniker + ":" + r.resolve(rest)
+	}
+	return spec
 }
 
 // resolveSubject parses the subject string or extracts from the first attestation.
