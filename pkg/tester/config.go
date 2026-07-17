@@ -19,11 +19,22 @@ type TestSuite struct {
 
 // TestCase defines a single policy test.
 type TestCase struct {
-	Name         string         `yaml:"name"`
-	Policy       string         `yaml:"policy"`
-	Expect       string         `yaml:"expect"` // "PASS" or "FAIL"
-	Subject      string         `yaml:"subject"`
-	Attestations []string       `yaml:"attestations"`
+	Name         string   `yaml:"name"`
+	Policy       string   `yaml:"policy"`
+	Expect       string   `yaml:"expect"` // "PASS" or "FAIL"
+	Subject      string   `yaml:"subject"`
+	Attestations []string `yaml:"attestations"`
+	// Collectors lists attestation collector init strings (e.g.
+	// "fs:testdata/bundle"). Filesystem-backed collectors ("fs:") resolve
+	// their path relative to the test file's directory. Collectors are an
+	// alternative evidence source to Attestations and are required to test
+	// policies whose evidence must be synthesized (e.g. signature
+	// attestations built from bundles or detached signatures).
+	Collectors []string `yaml:"collectors"`
+	// Signers lists the accepted signer identities (identity slugs, e.g.
+	// "sigstore::<issuer>::<identity>") passed to the verifier, equivalent to
+	// the --signer flag. Required to exercise policies that gate on the signer.
+	Signers      []string       `yaml:"signers"`
 	Context      []ContextValue `yaml:"context"`
 	ContextFiles []ContextFile  `yaml:"context-files"`
 }
@@ -80,8 +91,8 @@ func (s *TestSuite) Validate() error {
 		}
 		tc.Expect = expect
 
-		if len(tc.Attestations) == 0 {
-			errs = append(errs, fmt.Errorf("test %q: at least one attestation is required", tc.Name))
+		if len(tc.Attestations) == 0 && len(tc.Collectors) == 0 {
+			errs = append(errs, fmt.Errorf("test %q: at least one attestation or collector is required", tc.Name))
 		}
 	}
 
