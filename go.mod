@@ -11,7 +11,7 @@ require (
 	github.com/carabiner-dev/signer v0.5.4
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
-	github.com/sirupsen/logrus v1.9.4
+	github.com/sirupsen/logrus v1.10.0
 	github.com/spf13/cobra v1.10.2
 	google.golang.org/protobuf v1.36.11
 	sigs.k8s.io/release-utils v0.12.4
