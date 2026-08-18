@@ -5,7 +5,7 @@ go 1.26.5
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
 	github.com/carabiner-dev/ampel v1.3.6
-	github.com/carabiner-dev/collector v0.3.10
+	github.com/carabiner-dev/collector v0.3.11
 	github.com/carabiner-dev/command v0.3.1
 	github.com/carabiner-dev/policy v0.5.2
 	github.com/carabiner-dev/signer v0.5.4
@@ -13,7 +13,7 @@ require (
 	github.com/in-toto/attestation v1.2.0
 	github.com/sirupsen/logrus v1.10.0
 	github.com/spf13/cobra v1.10.2
-	google.golang.org/protobuf v1.36.11
+	google.golang.org/protobuf v1.36.12
 	sigs.k8s.io/release-utils v0.12.4
 )
 
@@ -42,6 +42,7 @@ require (
 	github.com/blang/semver v3.5.1+incompatible // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
 	github.com/carabiner-dev/attestation v0.2.1 // indirect
+	github.com/carabiner-dev/deadrop v0.0.0-20260228173914-d95e9ea2877d // indirect
 	github.com/carabiner-dev/ghrfs v0.3.7 // indirect
 	github.com/carabiner-dev/github v0.2.3 // indirect
 	github.com/carabiner-dev/hasher v0.2.4 // indirect
@@ -50,9 +51,12 @@ require (
 	github.com/carabiner-dev/osv v0.1.1 // indirect
 	github.com/carabiner-dev/predicates v0.5.0 // indirect
 	github.com/carabiner-dev/sbomfs v0.1.0 // indirect
-	github.com/carabiner-dev/vcslocator v0.4.6 // indirect
+	github.com/carabiner-dev/spdx3 v0.1.0 // indirect
+	github.com/carabiner-dev/stash v0.0.0-20260716192412-e2fe293d76a5 // indirect
+	github.com/carabiner-dev/vcslocator v0.4.7 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
+	github.com/chainguard-dev/clog v1.8.0 // indirect
 	github.com/charmbracelet/colorprofile v0.2.3-0.20250311203215-f60798e515dc // indirect
 	github.com/charmbracelet/lipgloss v1.1.1-0.20250404203927-76690c660834 // indirect
 	github.com/charmbracelet/x/ansi v0.10.2 // indirect
@@ -76,7 +80,7 @@ require (
 	github.com/github/smimesign v0.2.0 // indirect
 	github.com/go-git/gcfg v1.5.1-0.20230307220236-3a3c6141e376 // indirect
 	github.com/go-git/go-billy/v5 v5.9.1 // indirect
-	github.com/go-git/go-git/v5 v5.19.1 // indirect
+	github.com/go-git/go-git/v5 v5.19.2 // indirect
 	github.com/go-jose/go-jose/v4 v4.1.4 // indirect
 	github.com/go-logr/logr v1.4.4 // indirect
 	github.com/go-logr/stdr v1.2.2 // indirect
