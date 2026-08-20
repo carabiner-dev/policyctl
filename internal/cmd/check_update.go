@@ -213,7 +213,7 @@ func terminalWidth(out io.Writer) int {
 	if !ok {
 		return defaultTerminalWidth
 	}
-	w, _, err := term.GetSize(int(f.Fd())) //nolint:gosec // fd values fit in int on all supported platforms
+	w, _, err := term.GetSize(int(f.Fd()))
 	if err != nil || w <= 0 {
 		return defaultTerminalWidth
 	}
