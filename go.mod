@@ -9,19 +9,16 @@ require (
 	github.com/carabiner-dev/command v0.3.1
 	github.com/carabiner-dev/policy v0.5.2
 	github.com/carabiner-dev/signer v0.5.4
+	github.com/charmbracelet/glamour v1.0.0
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
-	github.com/sirupsen/logrus v1.10.0
+	github.com/sirupsen/logrus v1.10.1
 	github.com/spf13/cobra v1.10.2
-	google.golang.org/protobuf v1.36.12
-	sigs.k8s.io/release-utils v0.12.4
-)
-
-require (
-	github.com/charmbracelet/glamour v1.0.0
 	github.com/yuin/goldmark v1.8.5
 	golang.org/x/term v0.45.0
+	google.golang.org/protobuf v1.36.12
 	gopkg.in/yaml.v3 v3.0.1
+	sigs.k8s.io/release-utils v0.12.4
 )
 
 require (
