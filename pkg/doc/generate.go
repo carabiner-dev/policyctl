@@ -30,6 +30,33 @@ func Generate(element any) (string, error) {
 	return b.String(), nil
 }
 
+// Title returns a plain text title for the document Generate produces for
+// element: a policy's name when it has one, otherwise the element kind and ID
+// used in the document heading, without markdown formatting.
+func Title(element any) string {
+	switch v := element.(type) {
+	case *papi.Policy:
+		if name := v.GetMeta().GetName(); name != "" {
+			return name
+		}
+		return "Policy: " + policyID(v)
+	case *papi.PolicySet:
+		return "PolicySet: " + v.GetId()
+	case *papi.PolicyGroup:
+		return "PolicyGroup: " + v.GetId()
+	default:
+		return "Policy Documentation"
+	}
+}
+
+// policyID returns the policy ID, or a placeholder for inline policies.
+func policyID(p *papi.Policy) string {
+	if id := p.GetId(); id != "" {
+		return id
+	}
+	return "(inline policy)"
+}
+
 func writePolicySet(b *strings.Builder, ps *papi.PolicySet) {
 	fmt.Fprintf(b, "# PolicySet: `%s`\n\n", ps.GetId())
 
@@ -141,11 +168,13 @@ func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int
 func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 	h := strings.Repeat("#", headingLevel)
 
-	id := p.GetId()
-	if id == "" {
-		id = "(inline policy)"
+	// A named policy is titled by its name; its ID stays visible in the
+	// overview table. Unnamed policies keep the "Policy: `id`" heading.
+	if name := p.GetMeta().GetName(); name != "" {
+		fmt.Fprintf(b, "%s %s\n\n", h, name)
+	} else {
+		fmt.Fprintf(b, "%s Policy: `%s`\n\n", h, policyID(p))
 	}
-	fmt.Fprintf(b, "%s Policy: `%s`\n\n", h, id)
 
 	if desc := p.GetMeta().GetDescription(); desc != "" {
 		fmt.Fprintf(b, "%s\n\n", desc)
@@ -159,6 +188,7 @@ func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 	fmt.Fprintln(b, "| Property | Value |")
 	fmt.Fprintln(b, "|----------|-------|")
 	fmt.Fprintln(b, "| **Type** | Policy |")
+	writeIDRow(b, p.GetId())
 	fmt.Fprintf(b, "| **Assert mode** | %s |\n", assertMode)
 	fmt.Fprintf(b, "| **Tenets** | %d |\n", len(p.GetTenets()))
 	if enforce := p.GetMeta().GetEnforce(); enforce != "" {
@@ -280,6 +310,15 @@ func writeIdentities(b *strings.Builder, ids []*sapi.Identity) {
 		}
 	}
 	fmt.Fprintln(b)
+}
+
+// writeIDRow writes the overview table row carrying the policy ID, skipping
+// policies without one (inline policies).
+func writeIDRow(b *strings.Builder, id string) {
+	if id == "" {
+		return
+	}
+	fmt.Fprintf(b, "| **ID** | `%s` |\n", id)
 }
 
 // section writes a markdown heading followed by a blank line.
