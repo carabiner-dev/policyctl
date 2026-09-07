@@ -9,6 +9,7 @@ import (
 	"os"
 	"strings"
 
+	"golang.org/x/mod/semver"
 	"gopkg.in/yaml.v3"
 )
 
@@ -37,6 +38,11 @@ type TestCase struct {
 	Signers      []string       `yaml:"signers"`
 	Context      []ContextValue `yaml:"context"`
 	ContextFiles []ContextFile  `yaml:"context-files"`
+	// AmpelVersion is the minimum ampel version (semver, e.g. "v1.3.7") the
+	// test needs. Harnesses that run tests against several ampel versions
+	// skip the test on engines older than this (see RunsOn). Empty means the
+	// test runs on any version.
+	AmpelVersion string `yaml:"ampel-version"`
 }
 
 // ContextValue is an inline context key-value pair.
@@ -94,7 +100,44 @@ func (s *TestSuite) Validate() error {
 		if len(tc.Attestations) == 0 && len(tc.Collectors) == 0 {
 			errs = append(errs, fmt.Errorf("test %q: at least one attestation or collector is required", tc.Name))
 		}
+
+		if tc.AmpelVersion != "" {
+			v := canonicalVersion(tc.AmpelVersion)
+			if !semver.IsValid(v) {
+				errs = append(errs, fmt.Errorf("test %q: ampel-version must be a semantic version, got %q", tc.Name, tc.AmpelVersion))
+			}
+			tc.AmpelVersion = v
+		}
 	}
 
 	return errors.Join(errs...)
+}
+
+// RunsOn reports whether the test case can run on the given ampel version.
+//
+// A test without an AmpelVersion floor runs on any engine. When the engine
+// version is unknown or not a semantic version (e.g. a development build
+// reporting "(devel)"), the test is assumed to run: a development tree is
+// expected to carry every feature the tests target. Module pseudo-versions
+// compare as semver, so a build of a commit between two tags sorts between
+// them and one ahead of the latest tag sorts below the next tag, which skips
+// rather than fails tests floored at that next release.
+func (tc *TestCase) RunsOn(ampelVersion string) bool {
+	if tc.AmpelVersion == "" {
+		return true
+	}
+	v := canonicalVersion(ampelVersion)
+	if !semver.IsValid(v) {
+		return true
+	}
+	return semver.Compare(v, canonicalVersion(tc.AmpelVersion)) >= 0
+}
+
+// canonicalVersion adds the leading "v" that golang.org/x/mod/semver requires
+// when it is missing, so users can write either "1.3.7" or "v1.3.7".
+func canonicalVersion(v string) string {
+	if v == "" || strings.HasPrefix(v, "v") {
+		return v
+	}
+	return "v" + v
 }
