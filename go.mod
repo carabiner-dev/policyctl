@@ -4,17 +4,17 @@ go 1.27.0
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/carabiner-dev/ampel v1.3.6
-	github.com/carabiner-dev/collector v0.3.13
+	github.com/carabiner-dev/ampel v1.3.7
+	github.com/carabiner-dev/collector v0.3.14
 	github.com/carabiner-dev/command v0.3.1
 	github.com/carabiner-dev/policy v0.5.3
-	github.com/carabiner-dev/signer v0.6.1
+	github.com/carabiner-dev/signer v0.6.2-0.20260901235141-7abffe0fc666
 	github.com/charmbracelet/glamour v1.0.0
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
-	github.com/yuin/goldmark v1.8.5
+	github.com/yuin/goldmark v1.8.6
 	golang.org/x/mod v0.39.0
 	golang.org/x/term v0.45.0
 	google.golang.org/protobuf v1.36.12
@@ -27,7 +27,7 @@ require (
 	buf.build/go/protovalidate v1.3.0 // indirect
 	cel.dev/expr v0.25.2 // indirect
 	dario.cat/mergo v1.0.2 // indirect
-	github.com/CycloneDX/cyclonedx-go v0.11.0 // indirect
+	github.com/CycloneDX/cyclonedx-go v0.12.0 // indirect
 	github.com/Masterminds/semver/v3 v3.5.0 // indirect
 	github.com/Microsoft/go-winio v0.6.2 // indirect
 	github.com/ProtonMail/go-crypto v1.4.1 // indirect
@@ -51,7 +51,7 @@ require (
 	github.com/carabiner-dev/sbomfs v0.2.0 // indirect
 	github.com/carabiner-dev/spdx3 v0.1.0 // indirect
 	github.com/carabiner-dev/stash v0.0.0-20260716192412-e2fe293d76a5 // indirect
-	github.com/carabiner-dev/vcslocator v0.4.7 // indirect
+	github.com/carabiner-dev/vcslocator v0.5.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
 	github.com/chainguard-dev/clog v1.8.0 // indirect
@@ -105,7 +105,7 @@ require (
 	github.com/goccy/go-json v0.10.6 // indirect
 	github.com/gogo/protobuf v1.3.2 // indirect
 	github.com/golang/groupcache v0.0.0-20241129210726-2c02b8208cf8 // indirect
-	github.com/google/cel-go v0.30.0 // indirect
+	github.com/google/cel-go v0.31.0 // indirect
 	github.com/google/certificate-transparency-go v1.3.3 // indirect
 	github.com/google/go-cmp v0.7.0 // indirect
 	github.com/google/go-containerregistry v0.22.0 // indirect
@@ -141,12 +141,12 @@ require (
 	github.com/openvex/go-vex v0.2.8 // indirect
 	github.com/ossf/osv-schema/bindings/go v0.0.0-20260730052020-9509daabeece // indirect
 	github.com/package-url/packageurl-go v0.1.7 // indirect
-	github.com/pandatix/go-cvss v0.6.2 // indirect
+	github.com/pandatix/go-cvss v0.6.4 // indirect
 	github.com/pjbgf/sha1cd v0.6.0 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/protobom/cel v0.1.0 // indirect
-	github.com/protobom/protobom v0.6.0 // indirect
+	github.com/protobom/cel v0.1.2 // indirect
+	github.com/protobom/protobom v0.6.1 // indirect
 	github.com/regclient/regclient v0.11.5 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/sassoftware/relic/v8 v8.2.0 // indirect
