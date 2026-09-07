@@ -145,7 +145,13 @@ func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 	if id == "" {
 		id = "(inline policy)"
 	}
-	fmt.Fprintf(b, "%s Policy: `%s`\n\n", h, id)
+	// A named policy is titled by its name; its ID stays visible in the
+	// overview table. Unnamed policies keep the "Policy: `id`" heading.
+	if name := p.GetMeta().GetName(); name != "" {
+		fmt.Fprintf(b, "%s %s\n\n", h, name)
+	} else {
+		fmt.Fprintf(b, "%s Policy: `%s`\n\n", h, id)
+	}
 
 	if desc := p.GetMeta().GetDescription(); desc != "" {
 		fmt.Fprintf(b, "%s\n\n", desc)
@@ -159,6 +165,7 @@ func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 	fmt.Fprintln(b, "| Property | Value |")
 	fmt.Fprintln(b, "|----------|-------|")
 	fmt.Fprintln(b, "| **Type** | Policy |")
+	writeIDRow(b, p.GetId())
 	fmt.Fprintf(b, "| **Assert mode** | %s |\n", assertMode)
 	fmt.Fprintf(b, "| **Tenets** | %d |\n", len(p.GetTenets()))
 	if enforce := p.GetMeta().GetEnforce(); enforce != "" {
@@ -280,6 +287,15 @@ func writeIdentities(b *strings.Builder, ids []*sapi.Identity) {
 		}
 	}
 	fmt.Fprintln(b)
+}
+
+// writeIDRow writes the overview table row carrying the policy ID, skipping
+// policies without one (inline policies).
+func writeIDRow(b *strings.Builder, id string) {
+	if id == "" {
+		return
+	}
+	fmt.Fprintf(b, "| **ID** | `%s` |\n", id)
 }
 
 // section writes a markdown heading followed by a blank line.
