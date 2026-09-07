@@ -60,16 +60,16 @@ func (do *docOptions) Validate() error {
 
 func (do *docOptions) AddFlags(cmd *cobra.Command) {
 	do.fileOptions.AddFlags(cmd)
-	cmd.PersistentFlags().StringVarP(
+	cmd.Flags().StringVarP(
 		&do.outputFile, "output", "o", "", "output file (default: stdout)",
 	)
-	cmd.PersistentFlags().StringVarP(
+	cmd.Flags().StringVarP(
 		&do.format, "format", "f", "", "output format: terminal, markdown, html (default: auto-detect)",
 	)
-	cmd.PersistentFlags().BoolVar(
+	cmd.Flags().BoolVar(
 		&do.diagram, "diagram", true, "embed mermaid diagrams of the policy structure",
 	)
-	cmd.PersistentFlags().BoolVar(
+	cmd.Flags().BoolVar(
 		&do.policyDetails, "policy-details", false,
 		"also diagram each policy embedded in a policy set or group",
 	)
@@ -172,6 +172,7 @@ Output formats:
 		},
 	}
 	opts.AddFlags(docCmd)
+	addDocIndex(docCmd)
 	parentCmd.AddCommand(docCmd)
 }
 

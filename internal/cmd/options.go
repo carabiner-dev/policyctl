@@ -24,7 +24,7 @@ func (fo *fileOptions) Validate() error {
 
 // AddFlags adds the subcommands flags
 func (fo *fileOptions) AddFlags(cmd *cobra.Command) {
-	cmd.PersistentFlags().StringVarP(
+	cmd.Flags().StringVarP(
 		&fo.policyFile, "policy", "p", "", "path to policy file",
 	)
 }
