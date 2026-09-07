@@ -30,6 +30,33 @@ func Generate(element any) (string, error) {
 	return b.String(), nil
 }
 
+// Title returns a plain text title for the document Generate produces for
+// element: a policy's name when it has one, otherwise the element kind and ID
+// used in the document heading, without markdown formatting.
+func Title(element any) string {
+	switch v := element.(type) {
+	case *papi.Policy:
+		if name := v.GetMeta().GetName(); name != "" {
+			return name
+		}
+		return "Policy: " + policyID(v)
+	case *papi.PolicySet:
+		return "PolicySet: " + v.GetId()
+	case *papi.PolicyGroup:
+		return "PolicyGroup: " + v.GetId()
+	default:
+		return "Policy Documentation"
+	}
+}
+
+// policyID returns the policy ID, or a placeholder for inline policies.
+func policyID(p *papi.Policy) string {
+	if id := p.GetId(); id != "" {
+		return id
+	}
+	return "(inline policy)"
+}
+
 func writePolicySet(b *strings.Builder, ps *papi.PolicySet) {
 	fmt.Fprintf(b, "# PolicySet: `%s`\n\n", ps.GetId())
 
@@ -141,16 +168,12 @@ func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int
 func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 	h := strings.Repeat("#", headingLevel)
 
-	id := p.GetId()
-	if id == "" {
-		id = "(inline policy)"
-	}
 	// A named policy is titled by its name; its ID stays visible in the
 	// overview table. Unnamed policies keep the "Policy: `id`" heading.
 	if name := p.GetMeta().GetName(); name != "" {
 		fmt.Fprintf(b, "%s %s\n\n", h, name)
 	} else {
-		fmt.Fprintf(b, "%s Policy: `%s`\n\n", h, id)
+		fmt.Fprintf(b, "%s Policy: `%s`\n\n", h, policyID(p))
 	}
 
 	if desc := p.GetMeta().GetDescription(); desc != "" {

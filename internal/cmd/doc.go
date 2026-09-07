@@ -6,6 +6,7 @@ package cmd
 import (
 	"errors"
 	"fmt"
+	"html"
 	"os"
 	"path/filepath"
 	"strings"
@@ -133,7 +134,7 @@ Output formats:
 			case formatMarkdown, "md":
 				output = md
 			case formatHTML:
-				output, err = renderHTML(md)
+				output, err = renderHTML(md, doc.Title(element))
 				if err != nil {
 					return fmt.Errorf("rendering html: %w", err)
 				}
@@ -154,29 +155,17 @@ Output formats:
 	parentCmd.AddCommand(docCmd)
 }
 
-func renderHTML(md string) (string, error) {
-	// Use glamour's HTML rendering
-	body, err := glamour.RenderBytes([]byte(md), "ascii")
-	if err != nil {
-		return "", err
-	}
-
-	// For a proper HTML doc, we'd wrap it. But glamour doesn't render to HTML directly.
-	// Use a simple markdown-to-html approach via goldmark which glamour depends on.
-	return renderHTMLWithGoldmark(md, body)
-}
-
-func renderHTMLWithGoldmark(md string, _ []byte) (string, error) {
-	// glamour uses goldmark internally; let's use it directly for HTML
+// renderHTML converts the markdown document to a standalone HTML page titled
+// with the given plain text title, with mermaid.js support for diagrams.
+func renderHTML(md, title string) (string, error) {
 	var buf strings.Builder
 
-	// Simple HTML wrapper with mermaid.js support
 	buf.WriteString(`<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Policy Documentation</title>
+<title>` + html.EscapeString(title) + `</title>
 <style>
   body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif; max-width: 900px; margin: 2rem auto; padding: 0 1rem; line-height: 1.6; color: #24292f; }
   table { border-collapse: collapse; width: 100%; margin: 1rem 0; }
@@ -196,7 +185,6 @@ func renderHTMLWithGoldmark(md string, _ []byte) (string, error) {
 <body>
 `)
 
-	// Convert markdown to HTML using goldmark
 	if err := goldmarkRender(&buf, md); err != nil {
 		return "", err
 	}

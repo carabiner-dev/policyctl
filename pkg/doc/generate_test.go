@@ -10,6 +10,14 @@ import (
 	papi "github.com/carabiner-dev/policy/api/v1"
 )
 
+const (
+	testPolicyID = "MY-POLICY"
+	testSetID    = "MY-SET"
+	testGroupID  = "MY-GROUP"
+
+	testPolicyName = "My Policy"
+)
+
 // firstLine returns the first line of a document.
 func firstLine(t *testing.T, md string) string {
 	t.Helper()
@@ -27,24 +35,24 @@ func TestGenerateHeadings(t *testing.T) {
 	}{
 		{
 			name:        "named policy uses its name as the title",
-			element:     &papi.Policy{Id: "MY-POLICY", Meta: &papi.Meta{Name: "My Policy"}},
+			element:     &papi.Policy{Id: testPolicyID, Meta: &papi.Meta{Name: testPolicyName}},
 			wantHeading: "# My Policy",
 			wantRows:    []string{"| **Type** | Policy |", "| **ID** | `MY-POLICY` |"},
 		},
 		{
 			name:        "unnamed policy keeps the kind and id heading",
-			element:     &papi.Policy{Id: "MY-POLICY"},
+			element:     &papi.Policy{Id: testPolicyID},
 			wantHeading: "# Policy: `MY-POLICY`",
 			wantRows:    []string{"| **ID** | `MY-POLICY` |"},
 		},
 		{
 			name:        "policy set heading is unchanged",
-			element:     &papi.PolicySet{Id: "MY-SET"},
+			element:     &papi.PolicySet{Id: testSetID},
 			wantHeading: "# PolicySet: `MY-SET`",
 		},
 		{
 			name:        "policy group heading is unchanged",
-			element:     &papi.PolicyGroup{Id: "MY-GROUP"},
+			element:     &papi.PolicyGroup{Id: testGroupID},
 			wantHeading: "# PolicyGroup: `MY-GROUP`",
 		},
 	} {
@@ -69,7 +77,7 @@ func TestGenerateHeadings(t *testing.T) {
 func TestGenerateNestedPolicyNames(t *testing.T) {
 	t.Parallel()
 	set := &papi.PolicySet{
-		Id: "MY-SET",
+		Id: testSetID,
 		Policies: []*papi.Policy{
 			{Id: "FIRST", Meta: &papi.Meta{Name: "First Policy"}},
 			{Id: "SECOND"},
@@ -103,5 +111,28 @@ func TestGenerateInlinePolicyHasNoIDRow(t *testing.T) {
 	}
 	if strings.Contains(md, "| **ID** |") {
 		t.Errorf("expected no ID row for an inline policy in:\n%s", md)
+	}
+}
+
+func TestTitle(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name    string
+		element any
+		want    string
+	}{
+		{name: "named policy", element: &papi.Policy{Id: testPolicyID, Meta: &papi.Meta{Name: testPolicyName}}, want: testPolicyName},
+		{name: "unnamed policy", element: &papi.Policy{Id: testPolicyID}, want: "Policy: MY-POLICY"},
+		{name: "inline unnamed policy", element: &papi.Policy{}, want: "Policy: (inline policy)"},
+		{name: "policy set", element: &papi.PolicySet{Id: testSetID}, want: "PolicySet: MY-SET"},
+		{name: "policy group", element: &papi.PolicyGroup{Id: testGroupID}, want: "PolicyGroup: MY-GROUP"},
+		{name: "unsupported element", element: "not a policy", want: "Policy Documentation"},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			if got := Title(tt.element); got != tt.want {
+				t.Errorf("Title() = %q, want %q", got, tt.want)
+			}
+		})
 	}
 }
