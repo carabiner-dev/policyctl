@@ -136,3 +136,70 @@ func TestTitle(t *testing.T) {
 		})
 	}
 }
+
+// nestedSet holds two inline policies and a group with one inline policy.
+func nestedSet() *papi.PolicySet {
+	return &papi.PolicySet{
+		Id:       testSetID,
+		Policies: []*papi.Policy{{Id: "P-ONE"}, {Id: "P-TWO"}},
+		Groups: []*papi.PolicyGroup{{
+			Id:     testGroupID,
+			Blocks: []*papi.PolicyBlock{{Policies: []*papi.Policy{{Id: "P-THREE"}}}},
+		}},
+	}
+}
+
+func TestGenerateDiagramOptions(t *testing.T) {
+	t.Parallel()
+	for _, tt := range []struct {
+		name     string
+		element  any
+		opts     []Option
+		wantMerm int // fenced mermaid blocks in the document
+	}{
+		{name: "policy gets its diagram by default", element: &papi.Policy{Id: testPolicyID}, wantMerm: 1},
+		{name: "policy without diagrams", element: &papi.Policy{Id: testPolicyID}, opts: []Option{WithoutDiagrams()}, wantMerm: 0},
+		{name: "group gets one structure diagram", element: &papi.PolicyGroup{Id: testGroupID, Blocks: []*papi.PolicyBlock{{Policies: []*papi.Policy{{Id: "P"}}}}}, wantMerm: 1},
+		{name: "group with policy details", element: &papi.PolicyGroup{Id: testGroupID, Blocks: []*papi.PolicyBlock{{Policies: []*papi.Policy{{Id: "P"}}}}}, opts: []Option{WithPolicyDetails(true)}, wantMerm: 2},
+		{name: "set and its group get structure diagrams", element: nestedSet(), wantMerm: 2},
+		{name: "set with policy details", element: nestedSet(), opts: []Option{WithPolicyDetails(true)}, wantMerm: 5},
+		{name: "set without diagrams", element: nestedSet(), opts: []Option{WithoutDiagrams(), WithPolicyDetails(true)}, wantMerm: 0},
+	} {
+		t.Run(tt.name, func(t *testing.T) {
+			t.Parallel()
+			md, err := Generate(tt.element, tt.opts...)
+			if err != nil {
+				t.Fatalf("unexpected error: %v", err)
+			}
+			if got := strings.Count(md, "```mermaid\n"); got != tt.wantMerm {
+				t.Errorf("found %d mermaid blocks, want %d, in:\n%s", got, tt.wantMerm, md)
+			}
+			if wantSections := tt.wantMerm; strings.Count(md, "# Structure\n") != wantSections {
+				t.Errorf("found %d Structure sections, want %d, in:\n%s", strings.Count(md, "# Structure\n"), wantSections, md)
+			}
+		})
+	}
+}
+
+// stubDiagrammer proves Generate embeds whatever markdown a Diagrammer returns.
+type stubDiagrammer struct{}
+
+func (stubDiagrammer) Policy(*papi.Policy) string           { return "![policy](policy.svg)\n" }
+func (stubDiagrammer) PolicyGroup(*papi.PolicyGroup) string { return "![group](group.svg)\n" }
+func (stubDiagrammer) PolicySet(*papi.PolicySet) string     { return "![set](set.svg)\n" }
+
+func TestGenerateCustomDiagrammer(t *testing.T) {
+	t.Parallel()
+	md, err := Generate(nestedSet(), WithDiagrammer(stubDiagrammer{}), WithPolicyDetails(true))
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, want := range []string{"## Structure\n\n![set](set.svg)\n", "![policy](policy.svg)", "![group](group.svg)"} {
+		if !strings.Contains(md, want) {
+			t.Errorf("expected %q in:\n%s", want, md)
+		}
+	}
+	if strings.Contains(md, "mermaid") {
+		t.Errorf("did not expect mermaid output with a custom diagrammer:\n%s", md)
+	}
+}

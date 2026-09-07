@@ -26,8 +26,10 @@ const (
 
 type docOptions struct {
 	fileOptions
-	outputFile string
-	format     string // "terminal", "markdown", "html"
+	outputFile    string
+	format        string // "terminal", "markdown", "html"
+	diagram       bool   // embed structure diagrams
+	policyDetails bool   // diagram policies embedded in sets and groups too
 }
 
 func (do *docOptions) Validate() error {
@@ -64,6 +66,13 @@ func (do *docOptions) AddFlags(cmd *cobra.Command) {
 	cmd.PersistentFlags().StringVarP(
 		&do.format, "format", "f", "", "output format: terminal, markdown, html (default: auto-detect)",
 	)
+	cmd.PersistentFlags().BoolVar(
+		&do.diagram, "diagram", true, "embed mermaid diagrams of the policy structure",
+	)
+	cmd.PersistentFlags().BoolVar(
+		&do.policyDetails, "policy-details", false,
+		"also diagram each policy embedded in a policy set or group",
+	)
 }
 
 func addDoc(parentCmd *cobra.Command) {
@@ -76,6 +85,13 @@ func addDoc(parentCmd *cobra.Command) {
 The doc subcommand reads a policy file (JSON or HJSON) and generates
 human-readable documentation including a technical overview, context
 values, identity requirements, and a mermaid structure diagram.
+
+For a policy, the diagram shows its inputs (attestation types, context
+values and chain links) and how its tenets combine: all must pass under
+AND, any one passing suffices under OR. For a policy group it shows the
+blocks and the policy alternatives in each, with the assert mode at every
+level. Policies embedded in a set or group only get their own diagram with
+--policy-details. Use --diagram=false to omit diagrams altogether.
 
 Output formats:
   terminal   Rendered markdown for the terminal (default)
@@ -111,7 +127,11 @@ Output formats:
 			element := policy.PolicyOrSetOrGroup(set, pcy, grp)
 
 			// Generate the markdown document
-			md, err := doc.Generate(element)
+			genOpts := []doc.Option{doc.WithPolicyDetails(opts.policyDetails)}
+			if !opts.diagram {
+				genOpts = append(genOpts, doc.WithoutDiagrams())
+			}
+			md, err := doc.Generate(element, genOpts...)
 			if err != nil {
 				return fmt.Errorf("generating documentation: %w", err)
 			}
