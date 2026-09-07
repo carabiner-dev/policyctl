@@ -15,19 +15,41 @@ import (
 const defaultAssertMode = "AND"
 
 // Generate produces a markdown document describing the given policy element.
-func Generate(element any) (string, error) {
-	var b strings.Builder
+// Options control the diagrams embedded in it: by default every element gets
+// a mermaid structure diagram, and policies embedded in sets and groups get
+// none of their own (see WithPolicyDetails).
+func Generate(element any, opts ...Option) (string, error) {
+	g := &generator{opts: defaultOptions()}
+	for _, opt := range opts {
+		opt(&g.opts)
+	}
 	switch v := element.(type) {
 	case *papi.Policy:
-		writePolicy(&b, v, 1)
+		g.writePolicy(v, 1, false)
 	case *papi.PolicySet:
-		writePolicySet(&b, v)
+		g.writePolicySet(v)
 	case *papi.PolicyGroup:
-		writePolicyGroup(&b, v, 1)
+		g.writePolicyGroup(v, 1)
 	default:
 		return "", fmt.Errorf("unsupported element type: %T", element)
 	}
-	return b.String(), nil
+	return g.b.String(), nil
+}
+
+// generator accumulates the document of one Generate call.
+type generator struct {
+	b    strings.Builder
+	opts Options
+}
+
+// writeDiagram writes a section holding a diagram, when one was rendered.
+func (g *generator) writeDiagram(heading, diagram string) {
+	if diagram == "" {
+		return
+	}
+	section(&g.b, heading)
+	g.b.WriteString(diagram)
+	fmt.Fprintln(&g.b)
 }
 
 // Title returns a plain text title for the document Generate produces for
@@ -57,7 +79,8 @@ func policyID(p *papi.Policy) string {
 	return "(inline policy)"
 }
 
-func writePolicySet(b *strings.Builder, ps *papi.PolicySet) {
+func (g *generator) writePolicySet(ps *papi.PolicySet) {
+	b := &g.b
 	fmt.Fprintf(b, "# PolicySet: `%s`\n\n", ps.GetId())
 
 	if desc := ps.GetMeta().GetDescription(); desc != "" {
@@ -93,27 +116,26 @@ func writePolicySet(b *strings.Builder, ps *papi.PolicySet) {
 		writeIdentities(b, ids)
 	}
 
-	section(b, "## Structure")
-	fmt.Fprintln(b, "```mermaid")
-	fmt.Fprint(b, MermaidPolicySet(ps))
-	fmt.Fprintln(b, "```")
-	fmt.Fprintln(b)
+	if d := g.opts.Diagrammer; d != nil {
+		g.writeDiagram("## Structure", d.PolicySet(ps))
+	}
 
 	if len(ps.GetPolicies()) > 0 {
 		section(b, "## Policies")
 		for _, p := range ps.GetPolicies() {
-			writePolicy(b, p, 3)
+			g.writePolicy(p, 3, true)
 		}
 	}
 
-	for _, g := range ps.GetGroups() {
-		writePolicyGroup(b, g, 2)
+	for _, grp := range ps.GetGroups() {
+		g.writePolicyGroup(grp, 2)
 	}
 
 	writeChangelog(b, ps.GetMeta().GetChangelog(), "## Changelog")
 }
 
-func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int) {
+func (g *generator) writePolicyGroup(pg *papi.PolicyGroup, headingLevel int) {
+	b := &g.b
 	h := strings.Repeat("#", headingLevel)
 
 	fmt.Fprintf(b, "%s PolicyGroup: `%s`\n\n", h, pg.GetId())
@@ -132,11 +154,9 @@ func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int
 	}
 	fmt.Fprintln(b)
 
-	section(b, h+"# Structure")
-	fmt.Fprintln(b, "```mermaid")
-	fmt.Fprint(b, MermaidPolicyGroup(pg))
-	fmt.Fprintln(b, "```")
-	fmt.Fprintln(b)
+	if d := g.opts.Diagrammer; d != nil {
+		g.writeDiagram(h+"# Structure", d.PolicyGroup(pg))
+	}
 
 	for i, block := range pg.GetBlocks() {
 		blockID := block.GetId()
@@ -156,7 +176,7 @@ func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int
 				label := policyRefLabel(p)
 				fmt.Fprintf(b, "- **Referenced policy**: [`%s`](%s)\n", label, uri)
 			} else {
-				writePolicy(b, p, headingLevel+2)
+				g.writePolicy(p, headingLevel+2, true)
 			}
 		}
 		fmt.Fprintln(b)
@@ -165,7 +185,11 @@ func writePolicyGroup(b *strings.Builder, pg *papi.PolicyGroup, headingLevel int
 	writeChangelog(b, pg.GetMeta().GetChangelog(), h+"# Changelog")
 }
 
-func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
+// writePolicy documents a policy at the given heading level. nested marks a
+// policy embedded in a set or group, whose diagram is only included when the
+// PolicyDetails option is on.
+func (g *generator) writePolicy(p *papi.Policy, headingLevel int, nested bool) {
+	b := &g.b
 	h := strings.Repeat("#", headingLevel)
 
 	// A named policy is titled by its name; its ID stays visible in the
@@ -204,6 +228,10 @@ func writePolicy(b *strings.Builder, p *papi.Policy, headingLevel int) {
 	if ids := p.GetIdentities(); len(ids) > 0 {
 		section(b, h+"# Identities")
 		writeIdentities(b, ids)
+	}
+
+	if d := g.opts.Diagrammer; d != nil && (!nested || g.opts.PolicyDetails) {
+		g.writeDiagram(h+"# Structure", d.Policy(p))
 	}
 
 	if len(p.GetTenets()) > 0 {
