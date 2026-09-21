@@ -120,8 +120,8 @@ github.com/brianvoe/gofakeit/v6 v6.28.0 h1:Xib46XXuQfmlLS2EXRuJpqcw8St6qSZz75OUo
 github.com/brianvoe/gofakeit/v6 v6.28.0/go.mod h1:Xj58BMSnFqcn/fAQeSK+/PLtC5kSb7FJIq4JyGa8vEs=
 github.com/c2sp/wycheproof v0.0.0-20260105152342-fca0d3ba9f12 h1:C34LW7dhWgjAaAOdNB8z2UCyJsXDjC6UTILljHuqOlI=
 github.com/c2sp/wycheproof v0.0.0-20260105152342-fca0d3ba9f12/go.mod h1:U1QjrC6KepOmtVmJn3QsKOTd9HliGr/da5afPEhLRnk=
-github.com/carabiner-dev/ampel v1.3.9 h1:gLXQEMlE9psx9zIklhL8Cz31JOgmD+DQTpsxqAOVBjk=
-github.com/carabiner-dev/ampel v1.3.9/go.mod h1:9iFPDu/clHdFehoIOAF+vkoPCAtK4Ds/1JfPu8rsXx0=
+github.com/carabiner-dev/ampel v1.3.10 h1:+2nH+QBYEMiJPAdQ3Jg9GZ3AVXZsfRmWZXZGZHIX/LY=
+github.com/carabiner-dev/ampel v1.3.10/go.mod h1:9iFPDu/clHdFehoIOAF+vkoPCAtK4Ds/1JfPu8rsXx0=
 github.com/carabiner-dev/attestation v0.2.1 h1:VhjV5YlO9TsW50Sr/Zd54bdbZhhDAqgxC3kB9z1I+3Q=
 github.com/carabiner-dev/attestation v0.2.1/go.mod h1:O84vF84RZG3pJO/6BYrPs718bZviHF5DKajP1HsrDpw=
 github.com/carabiner-dev/collector v0.3.16 h1:Tatp4tK/xWDluFwDqGfPPcYd9crCWm/0Ma+XlDAZ2Xs=
