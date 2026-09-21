@@ -4,7 +4,7 @@ go 1.27.0
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/carabiner-dev/ampel v1.3.9
+	github.com/carabiner-dev/ampel v1.3.10
 	github.com/carabiner-dev/collector v0.3.16
 	github.com/carabiner-dev/command v0.3.2
 	github.com/carabiner-dev/policy v0.5.5
