@@ -11,7 +11,7 @@ import (
 	"sort"
 	"strings"
 
-	"github.com/carabiner-dev/policy"
+	"github.com/policylabs/policy"
 	"github.com/spf13/cobra"
 	"golang.org/x/term"
 	"google.golang.org/protobuf/encoding/protojson"

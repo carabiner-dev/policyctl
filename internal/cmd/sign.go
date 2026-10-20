@@ -10,7 +10,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/carabiner-dev/policy"
+	"github.com/policylabs/policy"
 	"github.com/spf13/cobra"
 )
 

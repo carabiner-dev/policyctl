@@ -7,8 +7,8 @@ import (
 	"strings"
 	"testing"
 
-	papi "github.com/carabiner-dev/policy/api/v1"
 	gointoto "github.com/in-toto/attestation/go/v1"
+	papi "github.com/policylabs/policy/api/v1"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 

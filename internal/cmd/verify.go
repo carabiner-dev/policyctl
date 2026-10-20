@@ -10,9 +10,9 @@ import (
 	"os"
 
 	"github.com/carabiner-dev/command/keys"
-	"github.com/carabiner-dev/policy"
-	"github.com/carabiner-dev/policy/options"
-	sapi "github.com/carabiner-dev/signer/api/v1"
+	"github.com/policylabs/policy"
+	"github.com/policylabs/policy/options"
+	sapi "github.com/policylabs/signer/api/v1"
 	"github.com/spf13/cobra"
 )
 

@@ -4,14 +4,14 @@ go 1.27.0
 
 require (
 	github.com/TylerBrock/colorjson v0.0.0-20200706003622-8a50f05110d2
-	github.com/carabiner-dev/ampel v1.3.10
-	github.com/carabiner-dev/collector v0.3.16
 	github.com/carabiner-dev/command v0.3.4
-	github.com/carabiner-dev/policy v0.5.5
-	github.com/carabiner-dev/signer v0.6.2
 	github.com/charmbracelet/glamour v1.0.0
 	github.com/fatih/color v1.19.0
 	github.com/in-toto/attestation v1.2.0
+	github.com/policylabs/ampel v1.4.2
+	github.com/policylabs/collector v0.4.0
+	github.com/policylabs/policy v0.6.0
+	github.com/policylabs/signer v0.6.5-0.20261008081547-3730a48c4c4f
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
 	github.com/yuin/goldmark v1.8.6
@@ -70,7 +70,6 @@ require (
 	github.com/aymanbagabas/go-osc52/v2 v2.0.1 // indirect
 	github.com/aymerick/douceur v0.2.0 // indirect
 	github.com/blang/semver/v4 v4.0.0 // indirect
-	github.com/carabiner-dev/attestation v0.2.1 // indirect
 	github.com/carabiner-dev/deadrop v0.0.0-20260228173914-d95e9ea2877d // indirect
 	github.com/carabiner-dev/ghrfs v0.3.7 // indirect
 	github.com/carabiner-dev/github v0.2.3 // indirect
@@ -78,11 +77,10 @@ require (
 	github.com/carabiner-dev/jsonl v0.2.2 // indirect
 	github.com/carabiner-dev/openeox v1.0.0 // indirect
 	github.com/carabiner-dev/osv v0.1.2 // indirect
-	github.com/carabiner-dev/predicates v0.5.1 // indirect
 	github.com/carabiner-dev/sbomfs v0.2.0 // indirect
 	github.com/carabiner-dev/spdx3 v0.1.0 // indirect
-	github.com/carabiner-dev/stash v0.0.0-20260908191435-d6225e020426 // indirect
-	github.com/carabiner-dev/vcslocator v0.5.0 // indirect
+	github.com/carabiner-dev/stash v0.0.0-20261004182444-008b3bad7a45 // indirect
+	github.com/carabiner-dev/vcslocator v0.5.1 // indirect
 	github.com/cenkalti/backoff/v4 v4.3.0 // indirect
 	github.com/cenkalti/backoff/v5 v5.0.3 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -200,9 +198,10 @@ require (
 	github.com/pjbgf/sha1cd v0.6.0 // indirect
 	github.com/pkg/browser v0.0.0-20240102092130-5ac0b6a4141c // indirect
 	github.com/pkg/errors v0.9.1 // indirect
-	github.com/policylabs/signer v0.6.4 // indirect
+	github.com/policylabs/attestation v0.3.0 // indirect
+	github.com/policylabs/predicates v0.6.0 // indirect
 	github.com/protobom/cel v0.1.3 // indirect
-	github.com/protobom/protobom v0.6.1 // indirect
+	github.com/protobom/protobom v0.6.2 // indirect
 	github.com/regclient/regclient v0.11.6 // indirect
 	github.com/rivo/uniseg v0.4.7 // indirect
 	github.com/ryanuber/go-glob v1.0.0 // indirect
@@ -262,7 +261,7 @@ require (
 	google.golang.org/genproto v0.0.0-20260622175928-b703f567277d // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260819154853-08b0e4226688 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688 // indirect
-	google.golang.org/grpc v1.83.2 // indirect
+	google.golang.org/grpc v1.84.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
 	sigs.k8s.io/yaml v1.6.0 // indirect

@@ -10,12 +10,12 @@ import (
 	"strings"
 	"time"
 
-	ampelctx "github.com/carabiner-dev/ampel/pkg/context"
-	"github.com/carabiner-dev/ampel/pkg/verifier"
-	"github.com/carabiner-dev/collector"
-	"github.com/carabiner-dev/collector/envelope"
-	"github.com/carabiner-dev/policy"
 	gointoto "github.com/in-toto/attestation/go/v1"
+	ampelctx "github.com/policylabs/ampel/pkg/context"
+	"github.com/policylabs/ampel/pkg/verifier"
+	"github.com/policylabs/collector"
+	"github.com/policylabs/collector/envelope"
+	"github.com/policylabs/policy"
 )
 
 // Runner executes test cases. All relative paths are resolved against baseDir.

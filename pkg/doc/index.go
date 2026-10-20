@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	papi "github.com/carabiner-dev/policy/api/v1"
+	papi "github.com/policylabs/policy/api/v1"
 )
 
 // IndexEntry is a policy material listed in an index.
