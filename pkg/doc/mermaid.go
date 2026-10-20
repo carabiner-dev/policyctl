@@ -9,7 +9,7 @@ import (
 	"slices"
 	"strings"
 
-	papi "github.com/carabiner-dev/policy/api/v1"
+	papi "github.com/policylabs/policy/api/v1"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 

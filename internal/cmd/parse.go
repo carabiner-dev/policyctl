@@ -11,8 +11,8 @@ import (
 	"os"
 
 	"github.com/TylerBrock/colorjson"
-	"github.com/carabiner-dev/policy"
 	"github.com/fatih/color"
+	"github.com/policylabs/policy"
 	"github.com/spf13/cobra"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"

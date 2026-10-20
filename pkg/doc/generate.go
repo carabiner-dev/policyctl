@@ -7,8 +7,8 @@ import (
 	"fmt"
 	"strings"
 
-	papi "github.com/carabiner-dev/policy/api/v1"
-	sapi "github.com/carabiner-dev/signer/api/v1"
+	papi "github.com/policylabs/policy/api/v1"
+	sapi "github.com/policylabs/signer/api/v1"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 

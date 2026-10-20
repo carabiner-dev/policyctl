@@ -4,7 +4,7 @@
 package doc
 
 import (
-	papi "github.com/carabiner-dev/policy/api/v1"
+	papi "github.com/policylabs/policy/api/v1"
 )
 
 // Diagrammer renders diagrams of policy elements as markdown fragments that

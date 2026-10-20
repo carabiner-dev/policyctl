@@ -11,8 +11,8 @@ import (
 	"path/filepath"
 	"strings"
 
-	"github.com/carabiner-dev/policy"
 	"github.com/charmbracelet/glamour"
+	"github.com/policylabs/policy"
 	"github.com/spf13/cobra"
 
 	"github.com/carabiner-dev/policyctl/pkg/doc"
