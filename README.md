@@ -1,7 +1,7 @@
 # policyctl
 
 `policyctl` is the command line tool to author, inspect, sign, test and
-document [AMPEL](https://github.com/carabiner-dev/ampel) policy materials:
+document [AMPEL](https://github.com/policylabs/ampel) policy materials:
 policies, policy sets and policy groups.
 
 ## Installing

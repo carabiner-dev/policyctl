@@ -124,6 +124,14 @@ func (r *Runner) executeTest(ctx context.Context, tc *TestCase) (string, error) 
 	opts.AttestationFiles = attPaths
 	opts.ContextProviders = ctxProviders
 	opts.IdentityStrings = tc.Signers
+	// The attestations a test case lists are evidence it chose to hand the
+	// verifier, so they are admitted even when unsigned (unless the policy
+	// pins signer identities), as the CLI does for --attestation.
+	opts.AdmitUnverified = true
+	// Soft-fail policies whose runtime or plugins the engine lacks instead
+	// of failing them, as the CLI does with --skip-unsupported-runtime, so a
+	// harness can tell an unsupported policy from a failing one.
+	opts.SkipUnsupportedRuntime = true
 
 	// Resolve any filesystem-backed collector paths against the test directory.
 	collectors := make([]string, len(tc.Collectors))
