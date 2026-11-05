@@ -5,6 +5,8 @@ package doc
 
 import (
 	"fmt"
+	"maps"
+	"slices"
 	"strings"
 
 	papi "github.com/policylabs/policy/api/v1"
@@ -53,8 +55,8 @@ func (g *generator) writeDiagram(heading, diagram string) {
 }
 
 // Title returns a plain text title for the document Generate produces for
-// element: a policy's name when it has one, otherwise the element kind and ID
-// used in the document heading, without markdown formatting.
+// element: its name when it has one, otherwise the element kind and ID used
+// in the document heading, without markdown formatting.
 func Title(element any) string {
 	switch v := element.(type) {
 	case *papi.Policy:
@@ -63,8 +65,14 @@ func Title(element any) string {
 		}
 		return "Policy: " + policyID(v)
 	case *papi.PolicySet:
+		if name := v.GetMeta().GetName(); name != "" {
+			return name
+		}
 		return "PolicySet: " + v.GetId()
 	case *papi.PolicyGroup:
+		if name := v.GetMeta().GetName(); name != "" {
+			return name
+		}
 		return "PolicyGroup: " + v.GetId()
 	default:
 		return "Policy Documentation"
@@ -81,7 +89,13 @@ func policyID(p *papi.Policy) string {
 
 func (g *generator) writePolicySet(ps *papi.PolicySet) {
 	b := &g.b
-	fmt.Fprintf(b, "# PolicySet: `%s`\n\n", ps.GetId())
+	// A named set is titled by its name; its ID stays visible in the
+	// overview table. Unnamed sets keep the "PolicySet: `id`" heading.
+	if name := ps.GetMeta().GetName(); name != "" {
+		fmt.Fprintf(b, "# %s\n\n", name)
+	} else {
+		fmt.Fprintf(b, "# PolicySet: `%s`\n\n", ps.GetId())
+	}
 
 	if desc := ps.GetMeta().GetDescription(); desc != "" {
 		fmt.Fprintf(b, "%s\n\n", desc)
@@ -91,6 +105,7 @@ func (g *generator) writePolicySet(ps *papi.PolicySet) {
 	fmt.Fprintln(b, "| Property | Value |")
 	fmt.Fprintln(b, "|----------|-------|")
 	fmt.Fprintln(b, "| **Type** | PolicySet |")
+	fmt.Fprintf(b, "| **ID** | `%s` |\n", ps.GetId())
 	if v := ps.GetMeta().GetVersion(); v != 0 {
 		fmt.Fprintf(b, "| **Version** | %d |\n", v)
 	}
@@ -138,7 +153,13 @@ func (g *generator) writePolicyGroup(pg *papi.PolicyGroup, headingLevel int) {
 	b := &g.b
 	h := strings.Repeat("#", headingLevel)
 
-	fmt.Fprintf(b, "%s PolicyGroup: `%s`\n\n", h, pg.GetId())
+	// A named group is titled by its name; its ID stays visible in the
+	// overview table. Unnamed groups keep the "PolicyGroup: `id`" heading.
+	if name := pg.GetMeta().GetName(); name != "" {
+		fmt.Fprintf(b, "%s %s\n\n", h, name)
+	} else {
+		fmt.Fprintf(b, "%s PolicyGroup: `%s`\n\n", h, pg.GetId())
+	}
 
 	if desc := pg.GetMeta().GetDescription(); desc != "" {
 		fmt.Fprintf(b, "%s\n\n", desc)
@@ -148,6 +169,10 @@ func (g *generator) writePolicyGroup(pg *papi.PolicyGroup, headingLevel int) {
 	fmt.Fprintln(b, "| Property | Value |")
 	fmt.Fprintln(b, "|----------|-------|")
 	fmt.Fprintln(b, "| **Type** | PolicyGroup |")
+	fmt.Fprintf(b, "| **ID** | `%s` |\n", pg.GetId())
+	if v := pg.GetMeta().GetVersion(); v != 0 {
+		fmt.Fprintf(b, "| **Version** | %d |\n", v)
+	}
 	fmt.Fprintf(b, "| **Blocks** | %d |\n", len(pg.GetBlocks()))
 	if enforce := pg.GetMeta().GetEnforce(); enforce != "" {
 		fmt.Fprintf(b, "| **Enforce** | %s |\n", enforce)
@@ -286,8 +311,8 @@ func writeTenet(b *strings.Builder, t *papi.Tenet, index, headingLevel int) {
 
 	if outs := t.GetOutputs(); len(outs) > 0 {
 		fmt.Fprintln(b, "**Outputs:**")
-		for name, out := range outs {
-			fmt.Fprintf(b, "- `%s`: `%s`\n", name, truncate(out.GetCode(), 80))
+		for _, name := range slices.Sorted(maps.Keys(outs)) {
+			fmt.Fprintf(b, "- `%s`: `%s`\n", name, truncate(outs[name].GetCode(), 80))
 		}
 		fmt.Fprintln(b)
 	}
@@ -309,7 +334,8 @@ func writeTenet(b *strings.Builder, t *papi.Tenet, index, headingLevel int) {
 func writeContextTable(b *strings.Builder, ctx map[string]*papi.ContextVal) {
 	fmt.Fprintln(b, "| Name | Type | Required | Default |")
 	fmt.Fprintln(b, "|------|------|----------|---------|")
-	for name, cv := range ctx {
+	for _, name := range slices.Sorted(maps.Keys(ctx)) {
+		cv := ctx[name]
 		req := "no"
 		if cv.GetRequired() {
 			req = "**yes**"

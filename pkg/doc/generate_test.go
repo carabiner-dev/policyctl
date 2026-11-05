@@ -16,6 +16,8 @@ const (
 	testGroupID  = "MY-GROUP"
 
 	testPolicyName = "My Policy"
+	testSetName    = "The Set"
+	testGroupName  = "The Group"
 )
 
 // firstLine returns the first line of a document.
@@ -100,6 +102,65 @@ func TestGenerateNestedPolicyNames(t *testing.T) {
 	}
 }
 
+func TestGenerateNamedSetAndGroupHeadings(t *testing.T) {
+	t.Parallel()
+	set := &papi.PolicySet{
+		Id:   testSetID,
+		Meta: &papi.PolicySetMeta{Name: testSetName, Version: 2},
+		Groups: []*papi.PolicyGroup{
+			{Id: testGroupID, Meta: &papi.PolicyGroupMeta{Name: testGroupName, Version: 4}},
+		},
+	}
+	md, err := Generate(set)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, want := range []string{
+		"# " + testSetName + "\n",
+		"| **ID** | `MY-SET` |\n",
+		"| **Version** | 2 |\n",
+		"## " + testGroupName + "\n",
+		"| **ID** | `MY-GROUP` |\n",
+		"| **Version** | 4 |\n",
+	} {
+		if !strings.Contains(md, want) {
+			t.Errorf("expected %q in:\n%s", want, md)
+		}
+	}
+}
+
+func TestGenerateSortsContextAndOutputs(t *testing.T) {
+	t.Parallel()
+	p := &papi.Policy{
+		Id: testPolicyID,
+		Context: map[string]*papi.ContextVal{
+			"zulu": {Type: typeString},
+			"beta": {Type: typeString},
+			"mike": {Type: typeString},
+		},
+		Tenets: []*papi.Tenet{{
+			Id: "t",
+			Outputs: map[string]*papi.Output{
+				"zulu": {Code: "3"},
+				"beta": {Code: "1"},
+				"mike": {Code: "2"},
+			},
+		}},
+	}
+	md, err := Generate(p)
+	if err != nil {
+		t.Fatalf("unexpected error: %v", err)
+	}
+	for _, want := range []string{
+		"| `beta` | string | no |  |\n| `mike` | string | no |  |\n| `zulu` | string | no |  |\n",
+		"- `beta`: `1`\n- `mike`: `2`\n- `zulu`: `3`\n",
+	} {
+		if !strings.Contains(md, want) {
+			t.Errorf("expected %q in:\n%s", want, md)
+		}
+	}
+}
+
 func TestGenerateInlinePolicyHasNoIDRow(t *testing.T) {
 	t.Parallel()
 	md, err := Generate(&papi.Policy{Meta: &papi.Meta{Name: "Inline"}})
@@ -125,7 +186,9 @@ func TestTitle(t *testing.T) {
 		{name: "unnamed policy", element: &papi.Policy{Id: testPolicyID}, want: "Policy: MY-POLICY"},
 		{name: "inline unnamed policy", element: &papi.Policy{}, want: "Policy: (inline policy)"},
 		{name: "policy set", element: &papi.PolicySet{Id: testSetID}, want: "PolicySet: MY-SET"},
+		{name: "named policy set", element: &papi.PolicySet{Id: testSetID, Meta: &papi.PolicySetMeta{Name: testSetName}}, want: testSetName},
 		{name: "policy group", element: &papi.PolicyGroup{Id: testGroupID}, want: "PolicyGroup: MY-GROUP"},
+		{name: "named policy group", element: &papi.PolicyGroup{Id: testGroupID, Meta: &papi.PolicyGroupMeta{Name: testGroupName}}, want: testGroupName},
 		{name: "unsupported element", element: "not a policy", want: "Policy Documentation"},
 	} {
 		t.Run(tt.name, func(t *testing.T) {

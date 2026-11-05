@@ -5,6 +5,7 @@ package main
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/carabiner-dev/policyctl/internal/cmd"
 )
@@ -12,6 +13,7 @@ import (
 func main() {
 	cmdline := cmd.New()
 	if err := cmdline.Execute(); err != nil {
-		fmt.Printf("Exec error: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Exec error: %v\n", err)
+		os.Exit(1)
 	}
 }
