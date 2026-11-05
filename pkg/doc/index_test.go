@@ -19,7 +19,7 @@ func sampleIndex(t *testing.T) *Index {
 	idx, err := NewIndex([]IndexEntry{
 		{Element: &papi.Policy{
 			Id:   "ZETA",
-			Meta: &papi.Meta{Name: "Zeta | last"},
+			Meta: &papi.Meta{Name: "Zeta | last", Version: 3},
 			Tenets: []*papi.Tenet{
 				{Predicates: &papi.PredicateSpec{Types: []string{slsaType}}},
 				{Predicates: &papi.PredicateSpec{Types: []string{osvType, slsaType}}},
@@ -28,6 +28,7 @@ func sampleIndex(t *testing.T) *Index {
 		{Element: &papi.Policy{Id: "ALPHA", Predicates: &papi.PredicateSpec{Types: []string{osvType}}}},
 		{Element: &papi.PolicySet{
 			Id:       "THE-SET",
+			Meta:     &papi.PolicySetMeta{Name: "The set", Version: 2},
 			Policies: []*papi.Policy{{Id: "IN-SET", Predicates: &papi.PredicateSpec{Types: []string{slsaType}}}},
 			Groups: []*papi.PolicyGroup{{
 				Id:     "IN-SET-GROUP",
@@ -35,7 +36,8 @@ func sampleIndex(t *testing.T) *Index {
 			}},
 		}, Link: "sets/the-set.md"},
 		{Element: &papi.PolicyGroup{
-			Id: "THE-GROUP",
+			Id:   "THE-GROUP",
+			Meta: &papi.PolicyGroupMeta{Name: "The group"},
 			Blocks: []*papi.PolicyBlock{
 				{Policies: []*papi.Policy{{Id: "A", Predicates: &papi.PredicateSpec{Types: []string{osvType}}}, {Id: "B"}}},
 				{Policies: []*papi.Policy{{Id: "C", Predicates: &papi.PredicateSpec{Types: []string{osvType}}}}},
@@ -60,12 +62,12 @@ func TestIndexRender(t *testing.T) {
 	got := sampleIndex(t).Render(indexTitle)
 
 	assertContains(t, got,
-		"# Policy index\n\n## Policies\n\n"+IndexMarker("policies", "begin")+"\n| ID | Name | Predicate types |\n",
-		"| `ALPHA` |  | `"+osvType+"` |\n| [`ZETA`](zeta.md) | Zeta \\| last | `"+osvType+"`<br>`"+slsaType+"` |\n"+IndexMarker("policies", "end"),
-		"## Policy sets\n\n"+IndexMarker("sets", "begin")+"\n| ID | Policies | Groups | Predicate types |\n",
-		"| [`THE-SET`](sets/the-set.md) | 1 | 1 | `"+osvType+"`<br>`"+slsaType+"` |",
-		"## Policy groups\n\n"+IndexMarker("groups", "begin")+"\n| ID | Blocks | Policies | Predicate types |\n",
-		"| `THE-GROUP` | 2 | 3 | `"+osvType+"` |",
+		"# Policy index\n\n## Policies\n\n"+IndexMarker("policies", "begin")+"\n| ID | Name | Version | Predicate types |\n",
+		"| `ALPHA` |  |  | `"+osvType+"` |\n| [`ZETA`](zeta.md) | Zeta \\| last | 3 | `"+osvType+"`<br>`"+slsaType+"` |\n"+IndexMarker("policies", "end"),
+		"## Policy sets\n\n"+IndexMarker("sets", "begin")+"\n| ID | Name | Version | Policies | Groups | Predicate types |\n",
+		"| [`THE-SET`](sets/the-set.md) | The set | 2 | 1 | 1 | `"+osvType+"`<br>`"+slsaType+"` |",
+		"## Policy groups\n\n"+IndexMarker("groups", "begin")+"\n| ID | Name | Version | Blocks | Policies | Predicate types |\n",
+		"| `THE-GROUP` | The group |  | 2 | 3 | `"+osvType+"` |",
 	)
 }
 
@@ -94,7 +96,7 @@ func TestIndexInjectPreservesText(t *testing.T) {
 	}
 
 	assertContains(t, got,
-		"# My policies\n\nAn introduction.\n\n## Policies\n\nAbout the policies.\n\n"+IndexMarker("policies", "begin")+"\n| ID | Name | Predicate types |\n",
+		"# My policies\n\nAn introduction.\n\n## Policies\n\nAbout the policies.\n\n"+IndexMarker("policies", "begin")+"\n| ID | Name | Version | Predicate types |\n",
 		IndexMarker("policies", "end")+"\n\nTrailing notes.\n\n## Policy sets\n\n"+IndexMarker("sets", "begin"),
 		"## Policy groups\n\n"+IndexMarker("groups", "begin"),
 	)

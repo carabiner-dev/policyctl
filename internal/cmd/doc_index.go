@@ -63,8 +63,9 @@ func addDocIndex(parentCmd *cobra.Command) {
 		Long: `Generate an index of policies, policy sets and policy groups.
 
 The index lists the given policy materials in a table per kind: policies with
-their name and the predicate types they consume, sets and groups with their
-composition and the predicate types consumed by everything they contain. Each
+their name, version and the predicate types they consume, sets and groups
+with their name, version, composition and the predicate types consumed by
+everything they contain. Each
 ID links to the material's own document, expected next to its source file
 with the .md extension (as written by "doc -o").
 

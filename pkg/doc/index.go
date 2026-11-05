@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"maps"
 	"slices"
+	"strconv"
 	"strings"
 
 	papi "github.com/policylabs/policy/api/v1"
@@ -22,8 +23,9 @@ type IndexEntry struct {
 }
 
 // Index lists policy materials by kind as markdown tables: policies with
-// their name and the predicate types they consume, sets and groups with
-// their composition and the predicate types consumed by everything inside.
+// their name, version and the predicate types they consume, sets and groups
+// with their name, version, composition and the predicate types consumed by
+// everything inside.
 //
 // Each table is wrapped in marker comments so Inject can refresh a document
 // that carries hand written text around and between the tables.
@@ -133,12 +135,13 @@ func (idx *Index) policiesTable() string {
 		return noEntries
 	}
 	var b strings.Builder
-	b.WriteString("| ID | Name | Predicate types |\n")
-	b.WriteString("|----|------|-----------------|\n")
+	b.WriteString("| ID | Name | Version | Predicate types |\n")
+	b.WriteString("|----|------|---------|-----------------|\n")
 	for _, e := range idx.policies {
 		p, _ := e.Element.(*papi.Policy) //nolint:errcheck // NewIndex classified the element
-		fmt.Fprintf(&b, "| %s | %s | %s |\n",
-			indexLink(policyID(p), e.Link), tableCell(p.GetMeta().GetName()), typesCell(policyInputTypes(p)))
+		fmt.Fprintf(&b, "| %s | %s | %s | %s |\n",
+			indexLink(policyID(p), e.Link), tableCell(p.GetMeta().GetName()),
+			versionCell(p.GetMeta().GetVersion()), typesCell(policyInputTypes(p)))
 	}
 	return strings.TrimRight(b.String(), "\n")
 }
@@ -148,12 +151,13 @@ func (idx *Index) setsTable() string {
 		return noEntries
 	}
 	var b strings.Builder
-	b.WriteString("| ID | Policies | Groups | Predicate types |\n")
-	b.WriteString("|----|----------|--------|-----------------|\n")
+	b.WriteString("| ID | Name | Version | Policies | Groups | Predicate types |\n")
+	b.WriteString("|----|------|---------|----------|--------|-----------------|\n")
 	for _, e := range idx.sets {
 		ps, _ := e.Element.(*papi.PolicySet) //nolint:errcheck // NewIndex classified the element
-		fmt.Fprintf(&b, "| %s | %d | %d | %s |\n",
-			indexLink(ps.GetId(), e.Link), len(ps.GetPolicies()), len(ps.GetGroups()), typesCell(setInputTypes(ps)))
+		fmt.Fprintf(&b, "| %s | %s | %s | %d | %d | %s |\n",
+			indexLink(ps.GetId(), e.Link), tableCell(ps.GetMeta().GetName()), versionCell(ps.GetMeta().GetVersion()),
+			len(ps.GetPolicies()), len(ps.GetGroups()), typesCell(setInputTypes(ps)))
 	}
 	return strings.TrimRight(b.String(), "\n")
 }
@@ -163,16 +167,17 @@ func (idx *Index) groupsTable() string {
 		return noEntries
 	}
 	var b strings.Builder
-	b.WriteString("| ID | Blocks | Policies | Predicate types |\n")
-	b.WriteString("|----|--------|----------|-----------------|\n")
+	b.WriteString("| ID | Name | Version | Blocks | Policies | Predicate types |\n")
+	b.WriteString("|----|------|---------|--------|----------|-----------------|\n")
 	for _, e := range idx.groups {
 		pg, _ := e.Element.(*papi.PolicyGroup) //nolint:errcheck // NewIndex classified the element
 		policies := 0
 		for _, block := range pg.GetBlocks() {
 			policies += len(block.GetPolicies())
 		}
-		fmt.Fprintf(&b, "| %s | %d | %d | %s |\n",
-			indexLink(pg.GetId(), e.Link), len(pg.GetBlocks()), policies, typesCell(groupInputTypes(pg)))
+		fmt.Fprintf(&b, "| %s | %s | %s | %d | %d | %s |\n",
+			indexLink(pg.GetId(), e.Link), tableCell(pg.GetMeta().GetName()), versionCell(pg.GetMeta().GetVersion()),
+			len(pg.GetBlocks()), policies, typesCell(groupInputTypes(pg)))
 	}
 	return strings.TrimRight(b.String(), "\n")
 }
@@ -215,6 +220,14 @@ func indexLink(id, link string) string {
 		return cell
 	}
 	return fmt.Sprintf("[%s](%s)", cell, link)
+}
+
+// versionCell renders a material's version, blank when none is set.
+func versionCell(v int64) string {
+	if v == 0 {
+		return ""
+	}
+	return strconv.FormatInt(v, 10)
 }
 
 // typesCell lists predicate types one per line inside a table cell.
