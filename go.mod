@@ -14,6 +14,7 @@ require (
 	github.com/policylabs/signer v0.6.5
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
+	github.com/stretchr/testify v1.12.1
 	github.com/yuin/goldmark v1.8.6
 	golang.org/x/mod v0.42.0
 	golang.org/x/term v0.47.0
