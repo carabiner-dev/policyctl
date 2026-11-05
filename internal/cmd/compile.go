@@ -4,6 +4,8 @@
 package cmd
 
 import (
+	"bytes"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"io"
@@ -71,11 +73,7 @@ func addCompile(parentCmd *cobra.Command) {
 			}
 
 			// Marshall the policy to json
-			marshaler := protojson.MarshalOptions{
-				Multiline: true,
-				Indent:    "  ",
-			}
-			element, err := marshaler.Marshal(policy.PolicyOrSetOrGroup(set, pcy, grp).(proto.Message)) //nolint:errcheck,forcetypeassert
+			element, err := marshalStable(policy.PolicyOrSetOrGroup(set, pcy, grp).(proto.Message)) //nolint:errcheck,forcetypeassert
 			if err != nil {
 				return fmt.Errorf("marshaling policy data: %w", err)
 			}
@@ -94,4 +92,20 @@ func addCompile(parentCmd *cobra.Command) {
 	}
 	opts.AddFlags(compileCmd)
 	parentCmd.AddCommand(compileCmd)
+}
+
+// marshalStable renders a message as indented JSON whose bytes do not
+// change between runs. protojson deliberately varies the whitespace of
+// its output, which would make every compiled file differ from one
+// compile to the next, so the compact form is indented by encoding/json.
+func marshalStable(m proto.Message) ([]byte, error) {
+	compact, err := protojson.Marshal(m)
+	if err != nil {
+		return nil, err
+	}
+	var out bytes.Buffer
+	if err := json.Indent(&out, compact, "", "  "); err != nil {
+		return nil, fmt.Errorf("indenting policy data: %w", err)
+	}
+	return out.Bytes(), nil
 }
