@@ -11,11 +11,11 @@ require (
 	github.com/policylabs/ampel v1.5.0
 	github.com/policylabs/collector v0.4.0
 	github.com/policylabs/policy v0.6.0
-	github.com/policylabs/signer v0.6.5
+	github.com/policylabs/signer v0.6.7
 	github.com/sirupsen/logrus v1.10.2
 	github.com/spf13/cobra v1.10.2
 	github.com/stretchr/testify v1.12.1
-	github.com/yuin/goldmark v1.8.6
+	github.com/yuin/goldmark v1.8.7
 	golang.org/x/mod v0.42.0
 	golang.org/x/term v0.47.0
 	google.golang.org/protobuf v1.36.12
@@ -262,7 +262,7 @@ require (
 	google.golang.org/genproto v0.0.0-20260622175928-b703f567277d // indirect
 	google.golang.org/genproto/googleapis/api v0.0.0-20260819154853-08b0e4226688 // indirect
 	google.golang.org/genproto/googleapis/rpc v0.0.0-20260819154853-08b0e4226688 // indirect
-	google.golang.org/grpc v1.84.0 // indirect
+	google.golang.org/grpc v1.85.0 // indirect
 	gopkg.in/warnings.v0 v0.1.2 // indirect
 	k8s.io/klog/v2 v2.140.0 // indirect
 	sigs.k8s.io/yaml v1.6.0 // indirect
