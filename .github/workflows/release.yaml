@@ -22,7 +22,7 @@ jobs:
 
     steps:
       - name: Setup bnd
-        uses: carabiner-dev/actions/install/bnd@63d43b57262e65927864c8f7ca0a6a8efe06acc0 # v1.3.1
+        uses: carabiner-dev/actions/install/bnd@2f56fd66c5ef961f72bca3dbacbbfbd9acc717ee # v1.3.2
 
       - name: Check out code
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
@@ -30,7 +30,7 @@ jobs:
           fetch-depth: 1
           persist-credentials: false
 
-      - uses: actions/setup-go@b7ad1dad31e06c5925ef5d2fc7ad053ef454303e # v7.0.0
+      - uses: actions/setup-go@d8cbb8045d7f43706b9177cceb36c1f91a6644d5 # v7.1.0
         with:
           go-version-file: go.mod
           cache: false
@@ -62,7 +62,7 @@ jobs:
             bnd push ${{github.repository}} policyctl-${{ steps.tag.outputs.tag_name }}.provenance.json
 
       - name: Generate SBOM
-        uses: carabiner-dev/actions/unpack/sbom@63d43b57262e65927864c8f7ca0a6a8efe06acc0 # v1.3.1
+        uses: carabiner-dev/actions/unpack/sbom@2f56fd66c5ef961f72bca3dbacbbfbd9acc717ee # v1.3.2
         env:
           GH_TOKEN: ${{ github.token }}
         with:
